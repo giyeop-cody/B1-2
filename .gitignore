@@ -1,0 +1,14 @@
+# 환경/실행 파일
+*.key
+.env
+__pycache__/
+*.pyc
+.DS_Store
+
+# 로그 (evidence/ 아래는 제외)
+logs/
+*.log
+!evidence/**/*.log
+
+# 바이너리 (레포에 이미 있음, 필요시 주석 해제)
+# agent-leak-app-*

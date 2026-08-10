@@ -1,0 +1,88 @@
+#cloud-config
+# B1-2: agent-leak-app 트러블슈팅 환경 프로비저닝
+# OrbStack Linux VM 용 cloud-init 설정
+# 사용: orb create vm --user-data vm/user-data.yml ubuntu:22.04 b1-2-lab
+
+hostname: b1-2-lab
+manage_etc_hosts: true
+
+# 패키지 설치 (관제 도구)
+packages:
+  - htop
+  - pstree
+  - sysstat
+  - procps
+  - net-tools
+package_update: true
+
+# 서비스 계정 생성 (root 금지 - 앱 부트 시퀀스 검증)
+users:
+  - name: agent-admin
+    groups: sudo
+    shell: /bin/bash
+    sudo: ALL=(ALL) NOPASSWD:ALL
+    ssh_authorized_keys: []
+
+# 디렉토리 구조 및 환경 변수 설정
+write_files:
+  - path: /home/agent-admin/.bash_profile
+    content: |
+      # B1-2 agent-leak-app 환경 변수
+      export AGENT_HOME="/home/agent-admin/agent-app"
+      export AGENT_PORT=15034
+      export AGENT_UPLOAD_DIR="$AGENT_HOME/upload_files"
+      export AGENT_KEY_PATH="$AGENT_HOME/api_keys"
+      export AGENT_LOG_DIR="/var/log/agent-app"
+      # 시나리오별 변경 변수 (기본값: OOM 유도)
+      export MEMORY_LIMIT=256
+      export CPU_MAX_OCCUPY=80
+      export MULTI_THREAD_ENABLE=false
+    owner: agent-admin:agent-admin
+    permissions: '0644'
+
+  - path: /home/agent-admin/agent-app/api_keys/secret.key
+    content: agent_api_key_test
+    owner: agent-admin:agent-admin
+    permissions: '0600'
+
+  - path: /home/agent-admin/run-scenario.sh
+    content: |
+      #!/usr/bin/env bash
+      set -euo pipefail
+      # 시나리오 실행 스크립트
+      # 사용: ./run-scenario.sh oom|cpu|deadlock [before|after]
+      SCENARIO="${1:?Usage: run-scenario.sh oom|cpu|deadlock [before|after]}"
+      MODE="${2:-before}"
+      source ~/.bash_profile
+
+      case "$SCENARIO-$MODE" in
+        oom-before)      MEMORY_LIMIT=256 CPU_MAX_OCCUPY=100 MULTI_THREAD_ENABLE=false ;;
+        oom-after)       MEMORY_LIMIT=512 CPU_MAX_OCCUPY=100 MULTI_THREAD_ENABLE=false ;;
+        cpu-before)      MEMORY_LIMIT=512 CPU_MAX_OCCUPY=100 MULTI_THREAD_ENABLE=false ;;
+        cpu-after)       MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50  MULTI_THREAD_ENABLE=false ;;
+        deadlock-before) MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50  MULTI_THREAD_ENABLE=true  ;;
+        deadlock-after)  MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50  MULTI_THREAD_ENABLE=false ;;
+        *) echo "Unknown scenario: $SCENARIO-$MODE"; exit 1 ;;
+      esac
+
+      export MEMORY_LIMIT CPU_MAX_OCCUPY MULTI_THREAD_ENABLE
+      LOG_DIR="$AGENT_LOG_DIR"
+      mkdir -p "$LOG_DIR"
+      APP_BIN="$AGENT_HOME/agent-leak-app"
+      echo "=== Scenario: $SCENARIO-$MODE ==="
+      echo "  MEMORY_LIMIT=$MEMORY_LIMIT CPU_MAX_OCCUPY=$CPU_MAX_OCCUPY MULTI_THREAD_ENABLE=$MULTI_THREAD_ENABLE"
+      exec "$APP_BIN"
+    owner: agent-admin:agent-admin
+    permissions: '0755'
+
+runcmd:
+  # 디렉토리 생성
+  - mkdir -p /home/agent-admin/agent-app/upload_files
+  - mkdir -p /home/agent-admin/agent-app/api_keys
+  - mkdir -p /var/log/agent-app
+  - chown -R agent-admin:agent-admin /home/agent-admin/agent-app
+  - chown -R agent-admin:agent-admin /var/log/agent-app
+  # agent-leak-app 바이너리 배치 (호스트에서 복사 필요)
+  # scp agent-leak-app-x86 agent-admin@<vm-ip>:/home/agent-admin/agent-app/agent-leak-app
+  - echo "=== B1-2 Lab VM Ready ==="
+  - echo "Next: scp agent-leak-app-x86 to VM, then: ./run-scenario.sh oom before"
