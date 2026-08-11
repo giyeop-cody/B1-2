@@ -129,3 +129,42 @@ MEMORY_LIMIT=256 ./agent-leak-app-x86  # OOM Before
 ---
 
 > *Codyssey AI/SW 기초 B1-2 과제 산출물*
+
+---
+
+## 🚀 실행 방법
+
+### 사전 준비
+- Docker 설치, B1-1에서 구성한 Linux 환경
+
+### 시나리오 실행
+```bash
+# OOM 시나리오
+cd vm && MEMORY_LIMIT=256 bash run-scenario.sh oom
+
+# CPU 시나리오
+cd vm && CPU_MAX_OCCUPY=80 bash run-scenario.sh cpu
+
+# Deadlock 시나리오
+cd vm && MULTI_THREAD_ENABLE=true bash run-scenario.sh deadlock
+```
+
+---
+
+## 🧪 테스트 방법
+
+### 장애 재현 + 분석
+1. OOM: `MEMORY_LIMIT=256` 실행 → 모니터링 로그에서 RSS 선형 증가 확인 → `MEMORY_LIMIT=512`로 변경 후 Before/After 비교
+2. CPU: `CPU_MAX_OCCUPY=80` 실행 → CPU 급상승 + Watchdog SIGTERM 확인 → `CPU_MAX_OCCUPY=50`으로 변경 후 비교
+3. Deadlock: `MULTI_THREAD_ENABLE=true` 실행 → PID는 존재하나 무응답 확인 → `false`로 변경 후 해결
+
+### 증거 확인
+```bash
+# 관제 로그
+cat evidence/monitoring.log
+
+# 각 장애별 이슈 리포트
+cat issues/issue-1-oom.md
+cat issues/issue-2-cpu.md
+cat issues/issue-3-deadlock.md
+```
