@@ -3,6 +3,8 @@
 - 상태: 로컬 검증 완료, 외부 절차 대기
 - 시작일: 2026-08-15
 - 원격 GitHub Issue: 인증 부재로 생성 대기
+- 원격 push 확인: `fatal: could not read Username for 'https://github.com'`
+- 안전 원칙: GitHub 토큰·비밀번호를 문서나 채팅에 적지 않고 저장소 소유자가 안전하게 로그인한 뒤 push
 
 ## 문제
 
