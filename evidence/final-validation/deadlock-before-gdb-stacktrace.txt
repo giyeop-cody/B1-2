@@ -1,0 +1,96 @@
+=== Stack Trace Capture for PID 4649 ===
+Timestamp: 2026-08-16 12:05:14
+Capture method: auto-detect (gdb > pstack > /proc)
+
+--- ps -p 4649 ---
+   4649    4647  0.2  0.8 SNl        00:23 /home/user/b1-2-work/agent-app/agent-leak-app
+
+--- ps -T -p 4649 (Thread List) ---
+    PID     TID %CPU %MEM STAT CMD
+   4649    4649  0.1  0.8 SNl  /home/user/b1-2-work/agent-app/agent-leak-app
+   4649    4755  0.0  0.8 SNl  /home/user/b1-2-work/agent-app/agent-leak-app
+   4649    4756  0.0  0.8 SNl  /home/user/b1-2-work/agent-app/agent-leak-app
+
+--- gdb thread backtrace ---
+[New LWP 4756]
+[New LWP 4755]
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+0x00007f0a2e45f9ee in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+
+Thread 3 (Thread 0x7f0a2d28d6c0 (LWP 4755) "agent-leak-app"):
+#0  0x00007f0a2e45f9ee in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#1  0x00007f0a2e454668 in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#2  0x00007f0a2e454c8c in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#3  0x00007f0a2e45f920 in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#4  0x00007f0a2e007cec in PyThread_acquire_lock_timed () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#5  0x00007f0a2e06e6f0 in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#6  0x00007f0a2e06e89e in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#7  0x00007f0a2df12033 in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#8  0x00007f0a2dec9aec in _PyObject_MakeTpCall () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#9  0x00007f0a2de62a7e in _PyEval_EvalFrameDefault () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#10 0x00007f0a2dfac4df in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#11 0x00007f0a2de60776 in _PyEval_EvalFrameDefault () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#12 0x00007f0a2dfac4df in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#13 0x00007f0a2de63efe in _PyEval_EvalFrameDefault () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#14 0x00007f0a2dfac4df in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#15 0x00007f0a2de63efe in _PyEval_EvalFrameDefault () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#16 0x00007f0a2dfac4df in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#17 0x00007f0a2decc47c in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#18 0x00007f0a2e06f8dd in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#19 0x00007f0a2e0016bb in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#20 0x00007f0a2e457b7b in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#21 0x00007f0a2e4d57f8 in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+
+Thread 2 (Thread 0x7f0a2ca8c6c0 (LWP 4756) "agent-leak-app"):
+#0  0x00007f0a2e45f9ee in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#1  0x00007f0a2e454668 in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#2  0x00007f0a2e454c8c in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#3  0x00007f0a2e45f920 in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#4  0x00007f0a2e007cec in PyThread_acquire_lock_timed () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#5  0x00007f0a2e06e6f0 in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#6  0x00007f0a2e06e89e in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#7  0x00007f0a2df12033 in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#8  0x00007f0a2dec9aec in _PyObject_MakeTpCall () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#9  0x00007f0a2de62a7e in _PyEval_EvalFrameDefault () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#10 0x00007f0a2dfac4df in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#11 0x00007f0a2de60776 in _PyEval_EvalFrameDefault () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#12 0x00007f0a2dfac4df in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#13 0x00007f0a2de63efe in _PyEval_EvalFrameDefault () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#14 0x00007f0a2dfac4df in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#15 0x00007f0a2de63efe in _PyEval_EvalFrameDefault () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#16 0x00007f0a2dfac4df in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#17 0x00007f0a2decc47c in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#18 0x00007f0a2e06f8dd in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#19 0x00007f0a2e0016bb in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#20 0x00007f0a2e457b7b in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#21 0x00007f0a2e4d57f8 in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+
+Thread 1 (Thread 0x7f0a2e3c4500 (LWP 4649) "agent-leak-app"):
+#0  0x00007f0a2e45f9ee in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#1  0x00007f0a2e454668 in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#2  0x00007f0a2e454c8c in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#3  0x00007f0a2e45f920 in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#4  0x00007f0a2e007cec in PyThread_acquire_lock_timed () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#5  0x00007f0a2e06e6f0 in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#6  0x00007f0a2e06e89e in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#7  0x00007f0a2ded5001 in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#8  0x00007f0a2de63efe in _PyEval_EvalFrameDefault () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#9  0x00007f0a2dfac4df in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#10 0x00007f0a2de63efe in _PyEval_EvalFrameDefault () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#11 0x00007f0a2dfac4df in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#12 0x00007f0a2de63efe in _PyEval_EvalFrameDefault () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#13 0x00007f0a2dfac4df in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#14 0x00007f0a2de63efe in _PyEval_EvalFrameDefault () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#15 0x00007f0a2dfac4df in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#16 0x00007f0a2de63efe in _PyEval_EvalFrameDefault () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#17 0x00007f0a2dfac4df in ?? () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#18 0x00007f0a2dfa750e in PyEval_EvalCode () from /tmp/_MEIqZes4u/libpython3.10.so.1.0
+#19 0x00000000004048ca in ?? ()
+#20 0x00000000004055cb in ?? ()
+#21 0x00007f0a2e3eeca8 in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#22 0x00007f0a2e3eed65 in __libc_start_main () from /lib/x86_64-linux-gnu/libc.so.6
+#23 0x0000000000401cea in ?? ()
+[Inferior 1 (process 4649) detached]
+
+=== Capture complete: /home/user/B1-2/evidence/final-validation/deadlock-before-gdb-stacktrace.txt ===

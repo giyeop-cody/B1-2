@@ -1,0 +1,37 @@
+timestamp=2026-08-16T12:05:04+00:00
+target_pid=4649
+=== sample 1 ===
+    PID    PPID %CPU %MEM STAT     ELAPSED CMD
+   4649    4647  0.3  0.8 SNl        00:12 /home/user/b1-2-work/agent-app/agent-leak-app
+    PID     TID %CPU %MEM STAT WCHAN                     CMD
+   4649    4649  0.3  0.8 SNl  futex_wait_queue          /home/user/b1-2-work/agent-app/agent-leak-app
+   4649    4755  0.0  0.8 SNl  futex_wait_queue          /home/user/b1-2-work/agent-app/agent-leak-app
+   4649    4756  0.0  0.8 SNl  futex_wait_queue          /home/user/b1-2-work/agent-app/agent-leak-app
+=== sample 2 ===
+    PID    PPID %CPU %MEM STAT     ELAPSED CMD
+   4649    4647  0.3  0.8 SNl        00:15 /home/user/b1-2-work/agent-app/agent-leak-app
+    PID     TID %CPU %MEM STAT WCHAN                     CMD
+   4649    4649  0.2  0.8 SNl  futex_wait_queue          /home/user/b1-2-work/agent-app/agent-leak-app
+   4649    4755  0.0  0.8 SNl  futex_wait_queue          /home/user/b1-2-work/agent-app/agent-leak-app
+   4649    4756  0.0  0.8 SNl  futex_wait_queue          /home/user/b1-2-work/agent-app/agent-leak-app
+=== sample 3 ===
+    PID    PPID %CPU %MEM STAT     ELAPSED CMD
+   4649    4647  0.2  0.8 SNl        00:17 /home/user/b1-2-work/agent-app/agent-leak-app
+    PID     TID %CPU %MEM STAT WCHAN                     CMD
+   4649    4649  0.2  0.8 SNl  futex_wait_queue          /home/user/b1-2-work/agent-app/agent-leak-app
+   4649    4755  0.0  0.8 SNl  futex_wait_queue          /home/user/b1-2-work/agent-app/agent-leak-app
+   4649    4756  0.0  0.8 SNl  futex_wait_queue          /home/user/b1-2-work/agent-app/agent-leak-app
+=== sample 4 ===
+    PID    PPID %CPU %MEM STAT     ELAPSED CMD
+   4649    4647  0.2  0.8 SNl        00:19 /home/user/b1-2-work/agent-app/agent-leak-app
+    PID     TID %CPU %MEM STAT WCHAN                     CMD
+   4649    4649  0.2  0.8 SNl  futex_wait_queue          /home/user/b1-2-work/agent-app/agent-leak-app
+   4649    4755  0.0  0.8 SNl  futex_wait_queue          /home/user/b1-2-work/agent-app/agent-leak-app
+   4649    4756  0.0  0.8 SNl  futex_wait_queue          /home/user/b1-2-work/agent-app/agent-leak-app
+=== sample 5 ===
+    PID    PPID %CPU %MEM STAT     ELAPSED CMD
+   4649    4647  0.2  0.8 SNl        00:21 /home/user/b1-2-work/agent-app/agent-leak-app
+    PID     TID %CPU %MEM STAT WCHAN                     CMD
+   4649    4649  0.1  0.8 SNl  futex_wait_queue          /home/user/b1-2-work/agent-app/agent-leak-app
+   4649    4755  0.0  0.8 SNl  futex_wait_queue          /home/user/b1-2-work/agent-app/agent-leak-app
+   4649    4756  0.0  0.8 SNl  futex_wait_queue          /home/user/b1-2-work/agent-app/agent-leak-app
