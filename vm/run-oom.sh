@@ -11,7 +11,8 @@ case "$MODE" in
   after)  MEMORY_LIMIT=512 ;;
   *) echo "Usage: run-oom.sh [before|after]"; exit 1 ;;
 esac
-export MEMORY_LIMIT CPU_MAX_OCCUPY=100 MULTI_THREAD_ENABLE=false
+# OOM 비교에서는 MEMORY_LIMIT만 바꾼다. CPU는 안전값 50으로 고정한다.
+export MEMORY_LIMIT CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=false
 
 echo "=== OOM $MODE: MEMORY_LIMIT=$MEMORY_LIMIT ==="
 "$AGENT_HOME/agent-leak-app" 2>&1 | tee "$LOG_DIR/app_oom_${MODE}.log"

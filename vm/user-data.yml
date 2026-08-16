@@ -1,7 +1,7 @@
 #cloud-config
 # B1-2: agent-leak-app 트러블슈팅 환경 프로비저닝
 # OrbStack Linux VM 용 cloud-init 설정
-# 사용: orb create vm --user-data vm/user-data.yml ubuntu:22.04 b1-2-lab
+# 사용: orb create ubuntu b1-2-lab -c vm/user-data.yml
 
 hostname: b1-2-lab
 manage_etc_hosts: true
@@ -56,8 +56,9 @@ write_files:
       source ~/.bash_profile
 
       case "$SCENARIO-$MODE" in
-        oom-before)      MEMORY_LIMIT=256 CPU_MAX_OCCUPY=100 MULTI_THREAD_ENABLE=false ;;
-        oom-after)       MEMORY_LIMIT=512 CPU_MAX_OCCUPY=100 MULTI_THREAD_ENABLE=false ;;
+        # OOM 비교에서는 MEMORY_LIMIT만 바꾸고 CPU는 안전값 50으로 고정한다.
+        oom-before)      MEMORY_LIMIT=256 CPU_MAX_OCCUPY=50  MULTI_THREAD_ENABLE=false ;;
+        oom-after)       MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50  MULTI_THREAD_ENABLE=false ;;
         cpu-before)      MEMORY_LIMIT=512 CPU_MAX_OCCUPY=100 MULTI_THREAD_ENABLE=false ;;
         cpu-after)       MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50  MULTI_THREAD_ENABLE=false ;;
         deadlock-before) MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50  MULTI_THREAD_ENABLE=true  ;;
