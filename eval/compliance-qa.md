@@ -42,7 +42,7 @@
 | 결과 | Watchdog 강제 종료 (37초) | cooldown 후 정상 동작 (60초+) |
 | 종료 여부 | 종료됨 | 종료되지 않음 |
 
-- 📎 증거: `evidence/cpu/app_before_CPU_MAX_OCCUPY_80.log`, `evidence/cpu/app_after_CPU_MAX_OCCUPY_50.log`
+- 📎 증거: `evidence/cpu/app_before_CPU_MAX_OCCUPY_100.log`, `evidence/cpu/app_after_CPU_MAX_OCCUPY_50.log`
 - 📎 리포트: `issues/issue-2-cpu.md`
 - 📎 재현: `vm/run-cpu.sh before|after`
 - 📎 추론: `docs/reasoning-03-cpu.md`
@@ -82,13 +82,17 @@
 
 **A: 준수 ✅ (사전평가 #15 FAIL → 보완 완료)**
 
-`/proc` 기반 스택 트레이스 캡처:
-- 3개 스레드 모두 `wchan=futex_wait_queue` (뮤텍스 대기)
-- `syscall=202(futex)` — 커널 레벨에서 락 대기 증명
-- 서로 다른 futex 주소 (0x34d2cbb0 vs 0x34d246a0) → 순환 대기 증명
+2026-08-16 실제 gdb 사용자 영역 백트레이스와 5회 프로세스 표본을 수집했다.
 
-- 📎 증거: `evidence/deadlock/stacktrace.txt`
-- 📎 스크립트: `vm/capture-stacktrace.sh` (gdb→pstack→/proc fallback)
+- 세 스레드 모두 `wchan=futex_wait_queue`
+- 실제 gdb의 세 스레드 모두 `PyThread_acquire_lock_timed` 경로 포함
+- 앱 로그에서 Thread-1의 A 보유+B 대기, Thread-2의 B 보유+A 대기 확인
+- stripped 바이너리이므로 gdb가 락 이름을 직접 보여줬다고 과장하지 않음
+
+- 📎 실제 gdb: `evidence/final-validation/deadlock-before-gdb-stacktrace.txt`
+- 📎 5회 표본: `evidence/final-validation/deadlock-before-process-samples.txt`
+- 📎 앱 로그: `evidence/final-validation/deadlock-before-app.log`
+- 📎 스크립트: `vm/capture-stacktrace.sh` (gdb→pstack→`/proc` fallback)
 - 📎 추론: `docs/reasoning-07-stacktrace.md`
 
 ---
@@ -148,7 +152,7 @@
 
 | 요건 | 준수 | 증거 |
 |------|------|------|
-| CPU 사용률 급상승 구간 캡처 | ✅ | `evidence/cpu/app_before_CPU_MAX_OCCUPY_80.log` — Load 5%→55.73% |
+| CPU 사용률 급상승 구간 캡처 | ✅ | `evidence/cpu/app_before_CPU_MAX_OCCUPY_100.log` 및 `evidence/final-validation/cpu-before-monitor.log` |
 | 종료 로그 ("WATCHDOG… SIGTERM" 등) | ✅ | `CPU Threshold Violated! (55.73%)` |
 | CPU_MAX_OCCUPY 변경 전후 비교 | ✅ | Before(100%, 37초 종료) / After(50%, cooldown 정상) |
 
