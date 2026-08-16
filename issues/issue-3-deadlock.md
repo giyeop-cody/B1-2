@@ -1,5 +1,16 @@
 [Bug] Deadlock - 멀티스레드 환경에서 교착상태(Deadlock) 발생으로 프로세스 무응답
 
+## 2026-08-16 최종 재검증
+
+두 실행 모두 `MEMORY_LIMIT=512`, `CPU_MAX_OCCUPY=50`으로 고정하고 `MULTI_THREAD_ENABLE`만 true→false로 변경했다.
+
+| 구분 | 환경 | 실제 결과 | 증거 |
+|---|---|---|---|
+| Before | Thread=true | 로그 BLOCKED, PID 생존, 세 스레드 futex 대기, 실제 gdb backtrace 확보 | `evidence/final-validation/deadlock-before-app.log`, `deadlock-before-process-samples.txt`, `deadlock-before-gdb-stacktrace.txt` |
+| After | Thread=false | Thread-A→B→C 순차 완료, `All tasks completed` | `evidence/final-validation/deadlock-after-app.log` |
+
+실제 gdb 결과는 stripped 바이너리이므로 애플리케이션 락 이름을 직접 보여주지 않는다. 세 스레드 모두 `PyThread_acquire_lock_timed` 경로에서 멈춘 실제 프레임과 `futex_wait_queue` 표본을 확인하고, 애플리케이션 로그의 A/B 상호 대기 기록과 함께 Deadlock을 판단했다.
+
 ## 1. Description (현상 설명)
 
 `agent-leak-app`을 `MULTI_THREAD_ENABLE=true` 환경에서 실행하면, 두 개의 Worker Thread가 서로 상대방의 자원을 대기하며 교착상태(Deadlock)에 빠진다. 프로세스가 종료되지 않고 PID는 유지되지만, CPU/메모리 변화가 없고 로그 출력도 완전히 멈춘 무응답 상태가 지속된다.
@@ -55,33 +66,48 @@ user        3179    3178  0 14:45 ?        00:00:00 ./agent-leak-app
 > - **State**: `SNl` (Sleeping, Low priority — 스레드가 락을 대기 중)
 > - **ETIME**: 37초 → 39초 → 41초 (시간은 흐르지만 활동 없음)
 
-### 2.4 스레드 스택 트레이스 (사전평가 #15 보완)
+### 2.4 실제 gdb 스레드 백트레이스 (사전평가 #15 보완)
 
-Deadlock 발생 시 `vm/capture-stacktrace.sh`로 캡처한 스레드별 백트레이스:
+Deadlock 발생 중 실제 PID에 gdb를 attach하고 `thread apply all bt`를 실행했다.
 
 ```bash
-# 캡처 명령
-./vm/capture-stacktrace.sh <PID> evidence/deadlock/stacktrace.txt
+sudo ./vm/capture-stacktrace.sh \
+  4649 \
+  evidence/final-validation/deadlock-before-gdb-stacktrace.txt
 ```
 
-예상 스택 트레이스 패턴 (gdb `thread apply all bt`):
+실제 출력 발췌:
 
+```text
+Thread 3 (LWP 4755 "agent-leak-app"):
+#0  ... in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#4  ... in PyThread_acquire_lock_timed () from libpython3.10.so.1.0
+
+Thread 2 (LWP 4756 "agent-leak-app"):
+#0  ... in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#4  ... in PyThread_acquire_lock_timed () from libpython3.10.so.1.0
+
+Thread 1 (LWP 4649 "agent-leak-app"):
+#0  ... in ?? () from /lib/x86_64-linux-gnu/libc.so.6
+#4  ... in PyThread_acquire_lock_timed () from libpython3.10.so.1.0
 ```
-Thread 2 (Worker-Thread-1):
-  #0  futex_wait (보유 락: Shared_Memory_A)
-  #1  pthread_mutex_lock (대상: Socket_Pool_B)  ← BLOCKED
-  #2  AgentWorker.process_transaction
 
-Thread 3 (Worker-Thread-2):
-  #0  futex_wait (보유 락: Socket_Pool_B)
-  #1  pthread_mutex_lock (대상: Shared_Memory_A)  ← BLOCKED
-  #2  AgentWorker.write_logs
-```
+동시에 2초 간격으로 5회 수집한 `ps -T` 결과에서 세 스레드의 `WCHAN`이 계속 `futex_wait_queue`로 유지됐다.
 
-> 스택 트레이스를 통해 각 스레드가 보유한 락과 대기 중인 락이 스택 프레임 수준에서 확인됨.
-> Thread-1은 `Shared_Memory_A`를 보유하며 `Socket_Pool_B`를 대기, Thread-2는 그 반대 → 순환 대기(Circular Wait)를 스택 레벨에서 증명.
+해석 범위:
 
-📎 증거 스크립트: `vm/capture-stacktrace.sh` (gdb → pstack → /proc fallback)
+- gdb는 세 스레드가 실제 Python lock 획득 경로에서 대기함을 보여준다.
+- stripped 바이너리이므로 gdb만으로 `Shared_Memory_A`, `Socket_Pool_B` 이름이나 락 소유자를 직접 식별할 수는 없다.
+- 락 이름과 상호 대기 관계는 애플리케이션 로그에서 확인한다.
+- 따라서 애플리케이션 로그, 5회 프로세스 표본, 실제 gdb 백트레이스를 결합해 순환 대기를 판단한다.
+
+📎 실제 증거:
+
+- `evidence/final-validation/deadlock-before-gdb-stacktrace.txt`
+- `evidence/final-validation/deadlock-before-process-samples.txt`
+- `evidence/final-validation/deadlock-before-app.log`
+
+📎 캡처 스크립트: `vm/capture-stacktrace.sh` (gdb → pstack → `/proc` fallback)
 
 ## 3. Root Cause Analysis (원인 분석)
 
