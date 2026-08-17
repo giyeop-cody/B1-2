@@ -1,10 +1,9 @@
 # [Final Validation] B1-2 실제 gdb 스택 트레이스 및 전체 재현 검증
 
-- 상태: 로컬 검증 완료, 외부 절차 대기
+- 상태: 로컬 검증 완료, PR·외부 평가 대기
 - 시작일: 2026-08-15
-- 원격 GitHub Issue: 인증 부재로 생성 대기
-- 원격 push 확인: `fatal: could not read Username for 'https://github.com'`
-- 안전 원칙: GitHub 토큰·비밀번호를 문서나 채팅에 적지 않고 저장소 소유자가 안전하게 로그인한 뒤 push
+- 원격 GitHub Issue: [#9](https://github.com/giyeop-cody/B1-2/issues/9)
+- 안전 원칙: GitHub 토큰·비밀번호를 코드·문서에 기록하지 않는다.
 
 ## 문제
 
@@ -25,7 +24,8 @@
 - [x] 증거 파일명과 보고서 경로 일치
 - [x] 재현 가이드 수정
 - [x] 로컬 자체평가
-- [ ] 원격 GitHub Issue·PR
+- [x] 원격 GitHub Issue #9
+- [ ] 원격 GitHub PR·병합
 - [ ] 실제 외부 동료평가
 - [ ] Codyssey 공식 평가
 
