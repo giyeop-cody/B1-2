@@ -1,8 +1,9 @@
 # [Final Validation] B1-2 실제 gdb 스택 트레이스 및 전체 재현 검증
 
-- 상태: 로컬 검증 완료, PR·외부 평가 대기
+- 상태: PR [#10](https://github.com/giyeop-cody/B1-2/pull/10) main 병합 완료, 외부 평가 대기
 - 시작일: 2026-08-15
-- 원격 GitHub Issue: [#9](https://github.com/giyeop-cody/B1-2/issues/9)
+- 병합일: 2026-08-17
+- 원격 GitHub Issue: [#9](https://github.com/giyeop-cody/B1-2/issues/9) (종료)
 - 안전 원칙: GitHub 토큰·비밀번호를 코드·문서에 기록하지 않는다.
 
 ## 문제
@@ -25,7 +26,7 @@
 - [x] 재현 가이드 수정
 - [x] 로컬 자체평가
 - [x] 원격 GitHub Issue #9
-- [ ] 원격 GitHub PR·병합
+- [x] 원격 GitHub PR #10·main 병합 (`fe65883`)
 - [ ] 실제 외부 동료평가
 - [ ] Codyssey 공식 평가
 
