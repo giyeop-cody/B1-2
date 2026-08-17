@@ -78,25 +78,24 @@
 
 ## 4. 각 기초를 익히기 위한 간단한 체험 예제
 
-### 4.1 OOM 재현
+### 4.1~4.3 전체 재현
+
+격리된 Linux에서 다음 한 명령으로 OOM·CPU·Deadlock Before/After와 실제 gdb 스택을 순서대로 수집한다.
+
 ```bash
-MEMORY_LIMIT=256 bash run-scenario.sh oom
-# 로그에서 RSS 선형 증가 확인
-# 종료 로그 "Memory limit exceeded" 확인
+scripts/run-final-validation.sh
 ```
 
-### 4.2 CPU 재현
-```bash
-CPU_MAX_OCCUPY=80 bash run-scenario.sh cpu
-# top에서 CPU 80%+ 확인
-# 종료 로그 "WATCHDOG... SIGTERM" 확인
-```
+실험에서는 한 번에 변수 하나만 바꾼다.
 
-### 4.3 Deadlock 재현
-```bash
-MULTI_THREAD_ENABLE=true bash run-scenario.sh deadlock
-# ps로 PID 존재 확인, but 응답 없음
-# pstack으로 스레드 상태 확인
+- OOM: CPU=50, Thread=false 고정, Memory 256→512
+- CPU: Memory=512, Thread=false 고정, CPU 100→50
+- Deadlock: Memory=512, CPU=50 고정, Thread true→false
+
+성공 문구:
+
+```text
+B1-2 FINAL RUNTIME VALIDATION: ALL PASS
 ```
 
 ---

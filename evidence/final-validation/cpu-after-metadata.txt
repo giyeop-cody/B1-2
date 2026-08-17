@@ -1,0 +1,6 @@
+case=cpu-after
+timestamp=2026-08-16T12:03:36+00:00
+MEMORY_LIMIT=512
+CPU_MAX_OCCUPY=50
+MULTI_THREAD_ENABLE=false
+binary=agent-leak-app-x86

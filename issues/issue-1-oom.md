@@ -1,5 +1,16 @@
 [Bug] OOM - 메모리 누수로 인한 MemoryGuard 강제 종료
 
+## 2026-08-16 최종 재검증
+
+비교 변수를 분리하기 위해 두 실행 모두 `CPU_MAX_OCCUPY=50`, `MULTI_THREAD_ENABLE=false`로 고정하고 `MEMORY_LIMIT`만 256→512로 변경했다.
+
+| 구분 | 환경 | 실제 결과 | 증거 |
+|---|---|---|---|
+| Before | Memory=256, CPU=50, Thread=false | 275MB에서 `Memory limit exceeded`, 프로세스 종료 | `evidence/final-validation/oom-before-app.log`, `oom-before-monitor.log` |
+| After | Memory=512, CPU=50, Thread=false | 525MB에서 cleanup, `MEMORY RECOVERED`, 계속 실행 | `evidence/final-validation/oom-after-app.log`, `oom-after-monitor.log` |
+
+기존 OOM After 실행 스크립트가 CPU=100을 사용하던 문제를 수정했다. CPU Watchdog이 Memory cleanup보다 먼저 개입할 수 있었기 때문에, 이는 OOM 실험에서 CPU라는 다른 변수가 섞이는 문제였다.
+
 ## 1. Description (현상 설명)
 
 `agent-leak-app`을 `MEMORY_LIMIT=256` 환경에서 실행하면, 약 30초 후 `MemoryGuard`에 의해 프로세스가 예고 없이 강제 종료된다.

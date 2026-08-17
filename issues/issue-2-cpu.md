@@ -1,5 +1,16 @@
 [Bug] CPU - CPU 과점유에 의한 Watchdog 보호 조치 프로세스 종료
 
+## 2026-08-16 최종 재검증
+
+두 실행 모두 `MEMORY_LIMIT=512`, `MULTI_THREAD_ENABLE=false`로 고정하고 `CPU_MAX_OCCUPY`만 100→50으로 변경했다.
+
+| 구분 | 환경 | 실제 결과 | 증거 |
+|---|---|---|---|
+| Before | Memory=512, CPU=100, Thread=false | 55%대에서 `CPU Threshold Violated`, 프로세스 종료 | `evidence/final-validation/cpu-before-app.log`, `cpu-before-monitor.log` |
+| After | Memory=512, CPU=50, Thread=false | 50%에서 cooldown 후 5%로 복귀, 계속 실행 | `evidence/final-validation/cpu-after-app.log`, `cpu-after-monitor.log` |
+
+기존 Before 증거 파일명은 `CPU_MAX_OCCUPY_80`이었지만 실제 파일 내부 설정은 100이었다. 파일명을 `app_before_CPU_MAX_OCCUPY_100.log`로 정정했다.
+
 ## 1. Description (현상 설명)
 
 `agent-leak-app`을 `CPU_MAX_OCCUPY=100` 환경에서 실행하면, CpuWorker가 CPU 부하를 점진적으로 증가시키다가 약 37초 후 Watchdog에 의해 프로세스가 종료된다.
@@ -10,7 +21,7 @@
 
 ## 2. Evidence & Logs (증거 자료)
 
-> 📎 **증거 파일**: `evidence/cpu/app_before_CPU_MAX_OCCUPY_80.log` | `evidence/cpu/app_after_CPU_MAX_OCCUPY_50.log`
+> 📎 **기존 증거 파일**: `evidence/cpu/app_before_CPU_MAX_OCCUPY_100.log` | `evidence/cpu/app_after_CPU_MAX_OCCUPY_50.log`
 
 ### 2.1 프로그램 실행 로그 (CPU Load 점진적 증가 + Watchdog 종료)
 
@@ -116,4 +127,4 @@ export CPU_MAX_OCCUPY=50
 
 ---
 
-> 📎 첨부 파일: `evidence/cpu/app_before_CPU_MAX_OCCUPY_80.log`, `evidence/cpu/app_after_CPU_MAX_OCCUPY_50.log`
+> 📎 기존 첨부 파일: `evidence/cpu/app_before_CPU_MAX_OCCUPY_100.log`, `evidence/cpu/app_after_CPU_MAX_OCCUPY_50.log`
