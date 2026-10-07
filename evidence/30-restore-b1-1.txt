@@ -1,0 +1,24 @@
+== leak-app 종료 ==
+== B1-1 agent-app 재기동 ==
+Agent READY: 확인
+--- 프로세스 소유자 (root 아님 확인) ---
+    PID USER     GROUP        ELAPSED CMD
+  13920 agent-a+ agent-a+       00:01 /usr/local/bin/agent-app
+--- 리슨 상태 ---
+tcp   LISTEN 0      1                   0.0.0.0:15034      0.0.0.0:*    users:(("agent-app",pid=13924,fd=4))     
+
+== APP RUN DONE ==
+== B1-1 체크리스트 재검증 ==
+35K /var/log/agent-app/rotation-test.log.20261007212002.gz
+35K /var/log/agent-app/rotation-test.log.20261007212004.gz
+35K /var/log/agent-app/rotation-test.log.20261007212006.gz
+35K /var/log/agent-app/rotation-test.log.20261007212008.gz
+35K /var/log/agent-app/rotation-test.log.20261007212011.gz
+[PASS] 로테이션 실측 로그 존재
+[PASS] 10MB 도달 시 회전 발생(.gz)
+[PASS] 회전본 10개 유지 정책
+[PASS] 회전본 gzip 무결성
+
+############ RESULT: PASS=36 FAIL=0 ############
+B1-1 VERIFICATION: ALL PASS
+== RESTORE DONE ==

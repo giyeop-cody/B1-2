@@ -1,0 +1,27 @@
+2026-10-07T23:10:25+09:00
+uid=1000(agent-admin) gid=1002(agent-admin) groups=1002(agent-admin),1000(agent-common),1001(agent-core)
+agent-common:x:1000:agent-admin,agent-dev,agent-test
+agent-core:x:1001:agent-admin,agent-dev
+drwxr-x---  1 agent-admin agent-common  86 Oct  7 21:22 /home/agent-admin/agent-app
+drwxrwx---+ 1 agent-admin agent-core    44 Oct  7 21:15 /home/agent-admin/agent-app/api_keys
+drwxrwx---+ 1 agent-admin agent-common   0 Oct  7 23:08 /home/agent-admin/agent-app/upload_files
+drwxrwx---+ 1 agent-admin agent-core   864 Oct  7 21:22 /var/log/agent-app
+agent-admin:agent-core 640 /home/agent-admin/agent-app/api_keys/secret.key
+LOG_WRITE_CHECK=PASS
+7e0a19cfa80ece6b547a5008273661f0d4d71e526e96b51e0d0f341dd1bb3e40  /home/agent-admin/agent-app/agent-leak-app
+Status: active
+Logging: off
+Default: deny (incoming), allow (outgoing), deny (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+20022/tcp                  ALLOW IN    Anywhere                  
+15034/tcp                  ALLOW IN    Anywhere                  
+
+active
+active
+State  Recv-Q Send-Q Local Address:Port  Peer Address:PortProcess                              
+LISTEN 0      1            0.0.0.0:15034      0.0.0.0:*    users:(("agent-app",pid=17944,fd=4))
+LISTEN 0      128          0.0.0.0:20022      0.0.0.0:*    users:(("sshd",pid=16283,fd=3))     
+LISTEN 0      128             [::]:20022         [::]:*    users:(("sshd",pid=16283,fd=4))     

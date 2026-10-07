@@ -1,0 +1,41 @@
+>>> Starting Agent Boot Sequence...
+[1/6] Checking User Account               [OK]
+   ... Running as service user 'agent-admin' (uid=1000)
+[2/6] Verifying Environment Variables     [OK]
+   ... All required Envs correct
+[3/6] Checking Required Files             [OK]
+   ... Verified 'secret.key' with correct key string.
+[4/6] Checking Port Availability          [OK]
+   ... Port 15034 is available.
+[5/6] Verifying Log Permission            [OK]
+   ... Log directory is writable: /var/log/agent-app
+[6/6] Verifying Mission Environment       [OK]
+   ... MEMORY_LIMIT=512MB, CPU_MAX_OCCUPY=100%, MULTI_THREAD_ENABLE=False
+------------------------------------------------------------
+All Boot Checks Passed!
+Agent READY
+2026-10-07 23:02:20,558 [INFO] [SafetyGuard] Process priority lowered (nice=10).
+2026-10-07 23:02:20,558 [INFO] Agent listening at port 15034
+
+==================================================
+ [ Agent Initiate ] Resource Check 
+==================================================
+ [ MEMORY ] Limit: 512MB 		[ OK ]
+ [ CPU    ] Limit: 100%  		[ WARNING: Recommend Under 50% ]
+ [ THREAD ] Concurrency: False 		[ OK ]
+--------------------------------------------------
+ >>> SYSTEM STATUS: STABLE. STARTING WORKLOAD MONITORING...
+==================================================
+
+2026-10-07 23:02:22,570 [INFO] [CpuWorker] Started. Maximum CPU Limit: 100%
+2026-10-07 23:02:22,570 [INFO] [CpuWorker] Current Load: 5.00%
+2026-10-07 23:02:25,691 [INFO] [CpuWorker] Current Load: 12.60%
+2026-10-07 23:02:28,810 [INFO] [CpuWorker] Current Load: 18.01%
+2026-10-07 23:02:31,927 [INFO] [CpuWorker] Current Load: 19.60%
+2026-10-07 23:02:35,047 [INFO] [CpuWorker] Current Load: 26.57%
+2026-10-07 23:02:38,167 [INFO] [CpuWorker] Current Load: 32.98%
+2026-10-07 23:02:41,287 [INFO] [CpuWorker] Current Load: 40.35%
+2026-10-07 23:02:44,408 [INFO] [CpuWorker] Current Load: 44.49%
+2026-10-07 23:02:47,527 [INFO] [CpuWorker] Current Load: 52.74%
+2026-10-07 23:02:47,629 [CRITICAL] [CpuWorker] CPU Threshold Violated! (52.739999999999995%).
+Terminated

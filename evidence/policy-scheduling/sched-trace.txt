@@ -1,0 +1,295 @@
+# tracer: nop
+#
+# entries-in-buffer/entries-written: 283/283   #P:6
+#
+#                                _-----=> irqs-off/BH-disabled
+#                               / _----=> need-resched
+#                              | / _---=> hardirq/softirq
+#                              || / _--=> preempt-depth
+#                              ||| / _-=> migrate-disable
+#                              |||| /     delay
+#           TASK-PID     CPU#  |||||  TIMESTAMP  FUNCTION
+#              | |         |   |||||     |         |
+          <idle>-0       [003] dNh4.  7563.712384: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7563.712405: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7563.712897: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=D ==> next_comm=kworker/3:1H next_pid=127 next_prio=100
+    kworker/3:1H-127     [003] d..5.  7563.712957: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+    kworker/3:1H-127     [003] d..2.  7563.712961: sched_switch: prev_comm=kworker/3:1H prev_pid=127 prev_prio=100 prev_state=I ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7563.713441: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7563.764652: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7563.764672: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7563.764930: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7563.815452: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7563.815472: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7563.815755: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7563.866084: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7563.866100: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7563.866330: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7563.917741: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7563.917808: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7563.918230: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7563.969594: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7563.969650: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7563.970082: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7564.020598: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.020625: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.021043: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7564.071425: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.071444: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.071766: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7564.122680: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.122739: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.123078: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7564.174469: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.174516: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.174856: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7564.225494: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.225513: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.225798: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7564.276194: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.276209: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.276499: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7564.326809: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.326826: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.327050: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7564.377518: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.377544: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.377943: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7564.429381: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.429408: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.429745: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7564.480061: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.480082: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.480499: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [004] d..2.  7564.480544: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+          <idle>-0       [003] dNh2.  7564.480669: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.480680: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.480690: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+  agent-leak-app-21662   [004] d..2.  7564.480761: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=R ==> next_comm=kworker/4:1H next_pid=133 next_prio=100
+    kworker/4:1H-133     [004] d..2.  7564.480767: sched_switch: prev_comm=kworker/4:1H prev_pid=133 prev_prio=100 prev_state=I ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+          <idle>-0       [003] dNh4.  7564.485846: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.485859: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.485871: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7564.491611: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.491625: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.491636: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7564.496823: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.496837: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.496848: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7564.502595: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.502610: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.502622: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7564.507795: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.507809: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.507820: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh4.  7564.513175: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.513188: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.513200: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+  agent-leak-app-21662   [004] d..2.  7564.513745: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh2.  7564.513771: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.513778: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+          <idle>-0       [004] dNh2.  7564.513855: sched_wakeup: comm=agent-leak-app pid=21662 prio=130 target_cpu=004
+          <idle>-0       [004] d..2.  7564.513863: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7564.513870: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+  agent-leak-app-21656   [003] d..2.  7564.513875: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [004] dN.2.  7564.513882: sched_wakeup: comm=agent-leak-app pid=21662 prio=130 target_cpu=004
+          <idle>-0       [004] d..2.  7564.513883: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+          <idle>-0       [005] d..2.  7564.513910: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7564.513943: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh2.  7564.514000: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7564.514007: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7564.514012: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh2.  7564.514034: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7564.514040: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7564.514043: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh2.  7564.514103: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+  agent-leak-app-21662   [004] d..2.  7564.514104: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+          <idle>-0       [005] d..2.  7564.514111: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+          <idle>-0       [003] dNh2.  7564.514166: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.514174: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.514179: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh2.  7564.514201: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.514207: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21656   [003] d..2.  7564.514210: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [003] dNh2.  7564.514239: sched_wakeup: comm=agent-leak-app pid=21656 prio=130 target_cpu=003
+          <idle>-0       [003] d..2.  7564.514246: sched_switch: prev_comm=swapper/3 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21656 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7564.514257: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+  agent-leak-app-21656   [003] d..2.  7564.514264: sched_switch: prev_comm=agent-leak-app prev_pid=21656 prev_prio=130 prev_state=S ==> next_comm=swapper/3 next_pid=0 next_prio=120
+          <idle>-0       [005] dN.2.  7564.514270: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7564.514270: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7564.519370: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7564.615019: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7564.615040: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7564.615075: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7566.623483: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7566.623550: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7566.623622: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [004] dNh4.  7567.527028: sched_wakeup: comm=agent-leak-app pid=21662 prio=130 target_cpu=004
+          <idle>-0       [004] d..2.  7567.527049: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7567.564691: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7567.627543: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7567.627578: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7567.628744: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=R ==> next_comm=kworker/u24:0 next_pid=20568 next_prio=120
+   kworker/u24:0-20568   [005] d..2.  7567.628751: sched_switch: prev_comm=kworker/u24:0 prev_pid=20568 prev_prio=120 prev_state=I ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7567.634097: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7567.729310: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7567.729326: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7567.729352: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7569.737261: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7569.737296: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7569.737358: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [004] dNh4.  7570.578723: sched_wakeup: comm=agent-leak-app pid=21662 prio=130 target_cpu=004
+          <idle>-0       [004] d..2.  7570.578826: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7570.578898: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=R ==> next_comm=kworker/4:0 next_pid=44 next_prio=120
+     kworker/4:0-44      [004] d..2.  7570.578906: sched_switch: prev_comm=kworker/4:0 prev_pid=44 prev_prio=120 prev_state=I ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7570.616642: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7570.740495: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7570.740520: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7570.741645: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=R ==> next_comm=kworker/5:1H next_pid=112 next_prio=100
+    kworker/5:1H-112     [005] d..2.  7570.741651: sched_switch: prev_comm=kworker/5:1H prev_pid=112 prev_prio=100 prev_state=I ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7570.751522: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7570.842423: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7570.842502: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7570.842538: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7572.850382: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7572.850417: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7572.850477: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [004] dNh4.  7573.626188: sched_wakeup: comm=agent-leak-app pid=21662 prio=130 target_cpu=004
+          <idle>-0       [004] d..2.  7573.626236: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7573.665555: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7573.854362: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7573.854378: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7573.867493: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7573.955290: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7573.955307: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7573.955333: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7575.963968: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7575.963994: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7575.964055: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [004] dNh4.  7576.674054: sched_wakeup: comm=agent-leak-app pid=21662 prio=130 target_cpu=004
+          <idle>-0       [004] d..2.  7576.674073: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7576.675178: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=R ==> next_comm=kworker/u24:11 next_pid=780 next_prio=120
+  kworker/u24:11-780     [004] d..2.  7576.675182: sched_switch: prev_comm=kworker/u24:11 prev_pid=780 prev_prio=120 prev_state=I ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7576.712912: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7576.967913: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7576.967932: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7576.990990: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7577.070549: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7577.070627: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7577.070664: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7579.078920: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7579.078947: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7579.079050: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [004] dNh4.  7579.724998: sched_wakeup: comm=agent-leak-app pid=21662 prio=130 target_cpu=004
+          <idle>-0       [004] d..2.  7579.725033: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7579.765515: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7580.083082: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7580.083172: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7580.113391: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7580.183925: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7580.183941: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7580.183974: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7582.191539: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7582.191585: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7582.191657: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [004] dNh4.  7582.776753: sched_wakeup: comm=agent-leak-app pid=21662 prio=130 target_cpu=004
+          <idle>-0       [004] d..2.  7582.776781: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7582.777163: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=R+ ==> next_comm=kworker/u24:11 next_pid=780 next_prio=120
+  kworker/u24:11-780     [004] d..2.  7582.777200: sched_switch: prev_comm=kworker/u24:11 prev_pid=780 prev_prio=120 prev_state=I ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7582.815275: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7583.197221: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7583.197303: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7583.220201: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=R ==> next_comm=kworker/5:1H next_pid=112 next_prio=100
+    kworker/5:1H-112     [005] d..2.  7583.220207: sched_switch: prev_comm=kworker/5:1H prev_pid=112 prev_prio=100 prev_state=I ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7583.235464: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7583.299047: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7583.299119: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7583.299154: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7585.307422: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7585.307447: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7585.307496: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [004] dNh4.  7585.827317: sched_wakeup: comm=agent-leak-app pid=21662 prio=130 target_cpu=004
+          <idle>-0       [004] d..2.  7585.827352: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7585.865876: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7586.310594: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7586.310629: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7586.354202: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7586.411293: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7586.411319: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7586.411357: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7588.419273: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7588.419308: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7588.419623: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [004] dNh4.  7588.875487: sched_wakeup: comm=agent-leak-app pid=21662 prio=130 target_cpu=004
+          <idle>-0       [004] d..2.  7588.875514: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7588.913283: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7589.423795: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7589.423829: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7589.474168: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7589.524533: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7589.524559: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7589.524594: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7591.533790: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7591.533815: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7591.533865: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [004] dNh4.  7591.911095: sched_wakeup: comm=agent-leak-app pid=21662 prio=130 target_cpu=004
+          <idle>-0       [004] d..2.  7591.911124: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7591.949635: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7592.538768: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7592.538840: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7592.579489: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7592.640638: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7592.640697: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7592.640750: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7594.651987: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7594.652004: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7594.652054: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [004] dNh4.  7594.963744: sched_wakeup: comm=agent-leak-app pid=21662 prio=130 target_cpu=004
+          <idle>-0       [004] d..2.  7594.963779: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7595.001125: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7595.655876: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7595.655910: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7595.692939: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7595.757536: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7595.757574: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7595.757610: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7597.767526: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7597.767607: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7597.767665: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [004] dNh4.  7598.016037: sched_wakeup: comm=agent-leak-app pid=21662 prio=130 target_cpu=004
+          <idle>-0       [004] d..2.  7598.016119: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7598.056184: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7598.771500: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7598.771535: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7598.807461: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7598.873137: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7598.873173: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7598.873211: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7600.883131: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7600.883213: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7600.883272: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [004] dNh4.  7601.070526: sched_wakeup: comm=agent-leak-app pid=21662 prio=130 target_cpu=004
+          <idle>-0       [004] d..2.  7601.070560: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7601.098840: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7601.887288: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7601.887327: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7601.888129: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=R ==> next_comm=kworker/5:0 next_pid=9415 next_prio=120
+     kworker/5:0-9415    [005] d..2.  7601.888138: sched_switch: prev_comm=kworker/5:0 prev_pid=9415 prev_prio=120 prev_state=I ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7601.923614: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7601.988850: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7601.988996: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7601.989071: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7603.998971: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7603.999090: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7603.999147: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [004] dNh4.  7604.113756: sched_wakeup: comm=agent-leak-app pid=21662 prio=130 target_cpu=004
+          <idle>-0       [004] d..2.  7604.113839: sched_switch: prev_comm=swapper/4 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7604.113971: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=R+ ==> next_comm=kworker/4:0 next_pid=44 next_prio=120
+     kworker/4:0-44      [004] d..2.  7604.113978: sched_switch: prev_comm=kworker/4:0 prev_pid=44 prev_prio=120 prev_state=I ==> next_comm=agent-leak-app next_pid=21662 next_prio=130
+  agent-leak-app-21662   [004] d..2.  7604.153663: sched_switch: prev_comm=agent-leak-app prev_pid=21662 prev_prio=130 prev_state=S ==> next_comm=swapper/4 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7605.003001: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7605.003020: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7605.031217: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120
+          <idle>-0       [005] dNh4.  7605.103706: sched_wakeup: comm=agent-leak-app pid=21663 prio=130 target_cpu=005
+          <idle>-0       [005] d..2.  7605.103718: sched_switch: prev_comm=swapper/5 prev_pid=0 prev_prio=120 prev_state=R ==> next_comm=agent-leak-app next_pid=21663 next_prio=130
+  agent-leak-app-21663   [005] d..2.  7605.103742: sched_switch: prev_comm=agent-leak-app prev_pid=21663 prev_prio=130 prev_state=S ==> next_comm=swapper/5 next_pid=0 next_prio=120

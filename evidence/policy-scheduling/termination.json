@@ -1,0 +1,8 @@
+{
+  "timestamp": "2026-10-07T23:07:01.522187+09:00",
+  "exit_code": 143,
+  "MEMORY_LIMIT": 512,
+  "CPU_MAX_OCCUPY": 100,
+  "MULTI_THREAD_ENABLE": false,
+  "binary_sha256": "7e0a19cfa80ece6b547a5008273661f0d4d71e526e96b51e0d0f341dd1bb3e40"
+}

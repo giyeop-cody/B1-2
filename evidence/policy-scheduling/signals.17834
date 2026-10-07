@@ -1,0 +1,4 @@
+23:06:15.731240 setpriority(PRIO_PROCESS, 0, 10) = 0
+23:07:01.498338 kill(17834, SIGTERM)    = 0
+23:07:01.498429 --- SIGTERM {si_signo=SIGTERM, si_code=SI_USER, si_pid=17834, si_uid=1000} ---
+23:07:01.499878 +++ killed by SIGTERM +++

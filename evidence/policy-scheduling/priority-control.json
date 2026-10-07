@@ -1,0 +1,23 @@
+{
+  "timestamp": "2026-10-07T23:08:01.848140+09:00",
+  "kind": "separate_busy_loop_control_not_app",
+  "same_cpu": 0,
+  "elapsed_seconds": 12.001013678000163,
+  "nice_values": [
+    0,
+    10
+  ],
+  "pids": [
+    17873,
+    17874
+  ],
+  "tick_deltas": [
+    1083,
+    116
+  ],
+  "cpu_percent": [
+    90.24237694065107,
+    9.665850161694852
+  ],
+  "cpu_share_ratio": 9.336206896551724
+}

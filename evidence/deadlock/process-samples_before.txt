@@ -1,0 +1,167 @@
+parent_pid=11283
+worker_pid=11287
+--- 프로세스 트리 ---
+  11283       1  2188 Ss         00:03 /home/agent-admin/agent-app/agent-leak-app
+  11287   11283 18548 SN         00:02 /home/agent-admin/agent-app/agent-leak-app
+=== sample 1 @ 2026-10-07 21:29:52 ===
+    PID    PPID %CPU %MEM   RSS STAT     ELAPSED CMD
+  11287   11283  0.3  0.1 18628 SNl        00:12 /home/agent-admin/agent-app/agent-leak-app
+    PID     TID %CPU %MEM STAT WCHAN                    CMD
+  11287   11287  0.3  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11363  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11364  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+-- top 배치 스냅샷 --
+top - 21:29:52 up 29 min,  0 user,  load average: 0.06, 0.08, 0.08
+Tasks:  22 total,   1 running,  21 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  1.6 us,  1.6 sy,  0.0 ni, 96.7 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15584.0 free,    566.0 used,    140.7 buff/cache     
+MiB Swap:  17073.5 total,  17073.5 free,      0.0 used.  15483.5 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+      1 root      20   0   21840   8668   5004 S   0.0   0.1   0:01.73 systemd
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15583.3 free,    566.6 used,    140.7 buff/cache     
+=== sample 2 @ 2026-10-07 21:30:02 ===
+    PID    PPID %CPU %MEM   RSS STAT     ELAPSED CMD
+  11287   11283  0.2  0.1 18628 SNl        00:23 /home/agent-admin/agent-app/agent-leak-app
+    PID     TID %CPU %MEM STAT WCHAN                    CMD
+  11287   11287  0.2  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11363  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11364  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+-- top 배치 스냅샷 --
+top - 21:30:03 up 29 min,  0 user,  load average: 0.05, 0.08, 0.08
+Tasks:  22 total,   1 running,  21 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  1.7 us,  1.7 sy,  0.0 ni, 96.7 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15569.8 free,    572.7 used,    155.7 buff/cache     
+MiB Swap:  17073.5 total,  17073.5 free,      0.0 used.  15476.8 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+      1 root      20   0   21840   8668   5004 S   0.0   0.1   0:01.73 systemd
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15569.7 free,    572.8 used,    155.7 buff/cache     
+=== sample 3 @ 2026-10-07 21:30:13 ===
+    PID    PPID %CPU %MEM   RSS STAT     ELAPSED CMD
+  11287   11283  0.1  0.1 18628 SNl        00:33 /home/agent-admin/agent-app/agent-leak-app
+    PID     TID %CPU %MEM STAT WCHAN                    CMD
+  11287   11287  0.1  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11363  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11364  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+-- top 배치 스냅샷 --
+top - 21:30:13 up 29 min,  0 user,  load average: 0.04, 0.08, 0.08
+Tasks:  22 total,   1 running,  21 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15568.2 free,    578.6 used,    146.9 buff/cache     
+MiB Swap:  17073.5 total,  17073.5 free,      0.0 used.  15470.8 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+      1 root      20   0   21840   7588   3924 S   0.0   0.0   0:01.73 systemd
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15568.0 free,    578.9 used,    146.9 buff/cache     
+=== sample 4 @ 2026-10-07 21:30:23 ===
+    PID    PPID %CPU %MEM   RSS STAT     ELAPSED CMD
+  11287   11283  0.1  0.1 18628 SNl        00:44 /home/agent-admin/agent-app/agent-leak-app
+    PID     TID %CPU %MEM STAT WCHAN                    CMD
+  11287   11287  0.1  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11363  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11364  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+-- top 배치 스냅샷 --
+top - 21:30:24 up 29 min,  0 user,  load average: 0.03, 0.07, 0.08
+Tasks:  22 total,   1 running,  21 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15567.2 free,    579.7 used,    146.9 buff/cache     
+MiB Swap:  17073.5 total,  17073.5 free,      0.0 used.  15469.8 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+      1 root      20   0   21840   7588   3924 S   0.0   0.0   0:01.73 systemd
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15566.8 free,    580.1 used,    146.9 buff/cache     
+=== sample 5 @ 2026-10-07 21:30:34 ===
+    PID    PPID %CPU %MEM   RSS STAT     ELAPSED CMD
+  11287   11283  0.0  0.1 18628 SNl        00:54 /home/agent-admin/agent-app/agent-leak-app
+    PID     TID %CPU %MEM STAT WCHAN                    CMD
+  11287   11287  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11363  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11364  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+-- top 배치 스냅샷 --
+top - 21:30:34 up 29 min,  0 user,  load average: 0.03, 0.07, 0.08
+Tasks:  22 total,   1 running,  21 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15563.6 free,    582.8 used,    147.8 buff/cache     
+MiB Swap:  17073.5 total,  17073.5 free,      0.0 used.  15466.6 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+      1 root      20   0   21840   7588   3924 S   0.0   0.0   0:01.73 systemd
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15563.0 free,    583.4 used,    147.8 buff/cache     
+=== sample 6 @ 2026-10-07 21:30:44 ===
+    PID    PPID %CPU %MEM   RSS STAT     ELAPSED CMD
+  11287   11283  0.0  0.1 18628 SNl        01:05 /home/agent-admin/agent-app/agent-leak-app
+    PID     TID %CPU %MEM STAT WCHAN                    CMD
+  11287   11287  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11363  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11364  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+-- top 배치 스냅샷 --
+top - 21:30:44 up 29 min,  0 user,  load average: 0.02, 0.07, 0.08
+Tasks:  22 total,   1 running,  21 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15559.5 free,    584.4 used,    152.9 buff/cache     
+MiB Swap:  17073.5 total,  17073.5 free,      0.0 used.  15465.1 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+      1 root      20   0   21840   7588   3924 S   0.0   0.0   0:01.73 systemd
+%Cpu(s):  1.6 us,  1.6 sy,  0.0 ni, 96.7 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15559.5 free,    584.4 used,    152.9 buff/cache     
+=== sample 7 @ 2026-10-07 21:30:55 ===
+    PID    PPID %CPU %MEM   RSS STAT     ELAPSED CMD
+  11287   11283  0.0  0.1 18612 SNl        01:15 /home/agent-admin/agent-app/agent-leak-app
+    PID     TID %CPU %MEM STAT WCHAN                    CMD
+  11287   11287  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11363  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11364  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+-- top 배치 스냅샷 --
+top - 21:30:55 up 30 min,  0 user,  load average: 0.02, 0.06, 0.08
+Tasks:  22 total,   1 running,  21 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15610.3 free,    560.8 used,     98.4 buff/cache     
+MiB Swap:  17073.5 total,  17073.5 free,      0.0 used.  15488.7 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+      1 root      20   0   21840   6884   3220 S   0.0   0.0   0:01.73 systemd
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15610.3 free,    560.8 used,     98.4 buff/cache     
+=== sample 8 @ 2026-10-07 21:31:05 ===
+    PID    PPID %CPU %MEM   RSS STAT     ELAPSED CMD
+  11287   11283  0.0  0.1 18612 SNl        01:25 /home/agent-admin/agent-app/agent-leak-app
+    PID     TID %CPU %MEM STAT WCHAN                    CMD
+  11287   11287  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11363  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11364  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+-- top 배치 스냅샷 --
+top - 21:31:05 up 30 min,  0 user,  load average: 0.02, 0.06, 0.07
+Tasks:  22 total,   1 running,  21 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15597.9 free,    562.1 used,    120.7 buff/cache     
+MiB Swap:  17073.5 total,  17073.5 free,      0.0 used.  15487.4 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+      1 root      20   0   21840   6884   3220 S   0.0   0.0   0:01.73 systemd
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15597.9 free,    562.1 used,    120.7 buff/cache     
+=== sample 9 @ 2026-10-07 21:31:15 ===
+    PID    PPID %CPU %MEM   RSS STAT     ELAPSED CMD
+  11287   11283  0.0  0.1 18612 SNl        01:36 /home/agent-admin/agent-app/agent-leak-app
+    PID     TID %CPU %MEM STAT WCHAN                    CMD
+  11287   11287  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11363  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11364  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+-- top 배치 스냅샷 --
+top - 21:31:16 up 30 min,  0 user,  load average: 0.01, 0.06, 0.07
+Tasks:  22 total,   1 running,  21 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15603.3 free,    556.5 used,    120.9 buff/cache     
+MiB Swap:  17073.5 total,  17073.5 free,      0.0 used.  15492.9 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+      1 root      20   0   21840   6884   3220 S   0.0   0.0   0:01.73 systemd
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15602.4 free,    557.5 used,    120.9 buff/cache     

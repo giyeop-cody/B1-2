@@ -1,0 +1,54 @@
+Linux b1-lab 6.17.8-orbstack-00308-g8f9c941121b1 #1 SMP PREEMPT Thu Nov 20 09:34:02 UTC 2025 x86_64 x86_64 x86_64 GNU/Linux
+    PID     TID CLS RTPRIO  NI PRI WCHAN                    CMD
+  17852   17852  TS      -   0  19 do_wait                  /home/agent-admin/agent-app/agent-leak-app
+pid 17852's current scheduling policy: SCHED_OTHER
+pid 17852's current scheduling priority: 0
+agent-leak-app (17852, #threads: 1)
+-------------------------------------------------------------------
+se.exec_start                                :       7561031.940232
+se.vruntime                                  :       1859608.712047
+se.sum_exec_runtime                          :            64.942591
+se.nr_migrations                             :                    1
+nr_switches                                  :                    3
+nr_voluntary_switches                        :                    2
+nr_involuntary_switches                      :                    1
+se.load.weight                               :              1048576
+se.avg.load_sum                              :                47615
+se.avg.runnable_sum                          :             42414748
+se.avg.util_sum                              :             42414748
+se.avg.load_avg                              :                 1021
+se.avg.runnable_avg                          :                  886
+se.avg.util_avg                              :                  886
+se.avg.last_update_time                      :        7561031940096
+se.avg.util_est                              :                  886
+policy                                       :                    0
+prio                                         :                  120
+se.slice                                     :              2100000
+clock-delta                                  :                   14
+    PID     TID CLS RTPRIO  NI PRI WCHAN                    CMD
+  17853   17853  TS      -  10   9 do_select                /home/agent-admin/agent-app/agent-leak-app
+pid 17853's current scheduling policy: SCHED_OTHER
+pid 17853's current scheduling priority: 0
+agent-leak-app (17853, #threads: 1)
+-------------------------------------------------------------------
+se.exec_start                                :       7561079.140546
+se.vruntime                                  :       1783977.879239
+se.sum_exec_runtime                          :            47.202476
+se.nr_migrations                             :                    0
+nr_switches                                  :                    2
+nr_voluntary_switches                        :                    2
+nr_involuntary_switches                      :                    0
+se.load.weight                               :               112640
+se.avg.load_sum                              :                47695
+se.avg.runnable_sum                          :             39627975
+se.avg.util_sum                              :             39624455
+se.avg.load_avg                              :                  109
+se.avg.runnable_avg                          :                  829
+se.avg.util_avg                              :                  829
+se.avg.last_update_time                      :        7561079140352
+se.avg.util_est                              :                  829
+policy                                       :                    0
+prio                                         :                  130
+se.slice                                     :              2100000
+clock-delta                                  :                   13
+kernel scheduler features: PLACE_LAG PLACE_DEADLINE_INITIAL PLACE_REL_DEADLINE RUN_TO_PARITY PREEMPT_SHORT NO_NEXT_BUDDY PICK_BUDDY CACHE_HOT_BUDDY DELAY_DEQUEUE DELAY_ZERO WAKEUP_PREEMPTION NO_HRTICK NO_HRTICK_DL NONTASK_CAPACITY TTWU_QUEUE SIS_UTIL NO_WARN_DOUBLE_CLOCK RT_PUSH_IPI NO_RT_RUNTIME_SHARE NO_LB_MIN ATTACH_AGE_LOAD WA_IDLE WA_WEIGHT WA_BIAS UTIL_EST NO_LATENCY_WARN 

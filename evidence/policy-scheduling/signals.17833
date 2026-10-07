@@ -1,0 +1,4 @@
+23:07:01.500100 --- SIGCHLD {si_signo=SIGCHLD, si_code=CLD_KILLED, si_pid=17834, si_uid=1000, si_status=SIGTERM, si_utime=50 /* 0.50 s */, si_stime=2 /* 0.02 s */} ---
+23:07:01.503381 tgkill(17833, 17833, SIGTERM) = 0
+23:07:01.503459 --- SIGTERM {si_signo=SIGTERM, si_code=SI_TKILL, si_pid=17833, si_uid=1000} ---
+23:07:01.503639 +++ killed by SIGTERM +++

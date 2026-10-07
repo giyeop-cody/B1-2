@@ -1,0 +1,92 @@
+[
+  {
+    "path": "evidence/cpu-resolution/app_after.log",
+    "bytes": 10778,
+    "sha256": "b65f55fd70b1d19faf52c1dfdd021e4c3655444022deb17927b740514e6ed808"
+  },
+  {
+    "path": "evidence/cpu-resolution/app_before.log",
+    "bytes": 2051,
+    "sha256": "3ef07828810ab1ba15668f30b11f8854e6b49c5964b240b9fae8bc9faf430832"
+  },
+  {
+    "path": "evidence/cpu-resolution/cpu_after.csv",
+    "bytes": 1314785,
+    "sha256": "b0593a1f9ec1ed3f7b62c421b5436a19f9050f370bace783e6fdb602a15fcf21"
+  },
+  {
+    "path": "evidence/cpu-resolution/cpu_before.csv",
+    "bytes": 206306,
+    "sha256": "7a535413b00251019a7e1aa0d357e3c821fc97d65a72d7bce79d980c9c7ecae6"
+  },
+  {
+    "path": "evidence/cpu-resolution/summary_after.json",
+    "bytes": 648,
+    "sha256": "27b45a6fff1680702911b381e073306610e1c31025ab4efd5f5b8cb3059724cf"
+  },
+  {
+    "path": "evidence/cpu-resolution/summary_before.json",
+    "bytes": 641,
+    "sha256": "c296f9b955380e7317679494baffb3a6068fd2458e7ef831fb2631fd7a4e049a"
+  },
+  {
+    "path": "evidence/policy-scheduling/cpu-policy-before.log",
+    "bytes": 2435,
+    "sha256": "089a689e61a303c272267fa5b643dbd9790b33cc5e341f5ddb945a530af14a13"
+  },
+  {
+    "path": "evidence/policy-scheduling/log-pattern.json",
+    "bytes": 588,
+    "sha256": "f95b388438cf8588880fb163a9eb79131e29ce02a53754b6d6e7d8b09ed2a5dc"
+  },
+  {
+    "path": "evidence/policy-scheduling/normal-app.log",
+    "bytes": 4744,
+    "sha256": "3f1d4223def0bccab1958b13a210ddc03e6fdd4f8b28f6ff845ca0b794b9e0b9"
+  },
+  {
+    "path": "evidence/policy-scheduling/policies.txt",
+    "bytes": 3956,
+    "sha256": "c0781dac8c7b3975d8bcd041672810b34e6c17749d5b1cbdc87b106ec5bb5432"
+  },
+  {
+    "path": "evidence/policy-scheduling/prerequisites.txt",
+    "bytes": 1503,
+    "sha256": "b72265bdd6d655d65cd42a6bcfe2b1b2344a63d224ac5887433fdf2d562017ac"
+  },
+  {
+    "path": "evidence/policy-scheduling/priority-control.json",
+    "bytes": 387,
+    "sha256": "dede3dc547c52bd059a443ee4a7f290fcf6b3adfbefaad82bfd42bbbda1a9021"
+  },
+  {
+    "path": "evidence/policy-scheduling/restore-final.txt",
+    "bytes": 967,
+    "sha256": "58fbde915d002980c387b4b4e18093b0bf56a80466d1e7fb49e47b81eda1eaaf"
+  },
+  {
+    "path": "evidence/policy-scheduling/sched-trace.txt",
+    "bytes": 46456,
+    "sha256": "7e2e506cfe1f757cbec77af4d6096b957298e99be8faf99907469d80b03ad82f"
+  },
+  {
+    "path": "evidence/policy-scheduling/signals.17832",
+    "bytes": 136,
+    "sha256": "c1ad517dfdc7a9ccba1cac2948226cfc24abce38f12099c21aea5bb10ce46d24"
+  },
+  {
+    "path": "evidence/policy-scheduling/signals.17833",
+    "bytes": 356,
+    "sha256": "1fffa9e2e20a9848d7e0e8aa0138e31f53404e6e8a8df93b3b8ad773e6b4b7b7"
+  },
+  {
+    "path": "evidence/policy-scheduling/signals.17834",
+    "bytes": 234,
+    "sha256": "3c271e7bee3d1776085e36d9d7d8f0c82e241f9fb0b947ddd1aac576714195ed"
+  },
+  {
+    "path": "evidence/policy-scheduling/termination.json",
+    "bytes": 241,
+    "sha256": "cbf8be7be0a8254d09502b6357346fbc7af5b601c5d27287ea451446b4521675"
+  }
+]

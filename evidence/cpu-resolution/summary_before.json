@@ -1,0 +1,19 @@
+{
+  "case": "before",
+  "timestamp": "2026-10-07T23:02:47.660358+09:00",
+  "MEMORY_LIMIT": 512,
+  "CPU_MAX_OCCUPY": 100,
+  "MULTI_THREAD_ENABLE": false,
+  "requested_seconds": 60,
+  "observed_seconds": 27.25482573499994,
+  "ready_at_seconds": 0.16748874899985822,
+  "result": "TERMINATED",
+  "exit_code": 143,
+  "peak_cpu_percent": 98.8090593481302,
+  "peak_pid": 17645,
+  "sample_rows": 2586,
+  "sampling_interval_target_seconds": 0.02,
+  "USER_HZ": 100,
+  "binary_sha256": "7e0a19cfa80ece6b547a5008273661f0d4d71e526e96b51e0d0f341dd1bb3e40",
+  "note": "20ms CPU estimates are quantized at USER_HZ; app internal load is a separate value."
+}
