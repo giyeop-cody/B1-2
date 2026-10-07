@@ -1,0 +1,12 @@
+case=oom-before
+timestamp=2026-10-07T21:22:28+0900
+host=b1-lab
+binary=/home/agent-admin/agent-app/agent-leak-app
+MEMORY_LIMIT=256
+CPU_MAX_OCCUPY=50
+MULTI_THREAD_ENABLE=false
+run_as=agent-admin
+app_parent_pid=7685
+app_worker_pid=7689
+observed_pid=7689
+result=TERMINATED

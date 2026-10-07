@@ -1,0 +1,548 @@
+
+[1;36m===== 1/6 agent-leak-app 배치 (B1-1 앱 종료 → 같은 VM 재사용) =====[0m
+== [1/5] B1-1 앱(agent-app) 종료 — 포트 15034 확보 ==
+6386 /usr/local/bin/agent-app
+6390 /usr/local/bin/agent-app
+포트 15034 비어 있음
+
+== [2/5] agent-leak-app 배치: /home/agent-admin/agent-app/agent-leak-app ==
+-rwxr-xr-x 1 agent-admin agent-common 6502016 Oct  7 21:22 /home/agent-admin/agent-app/agent-leak-app
+
+== [3/5] B1-2 프로세스 관제 스크립트 배치 (B1-1 monitor.sh 와 별개) ==
+total 28
+-rwxr-x--- 1 agent-dev agent-core 4365 Oct  7 21:22 capture-stacktrace.sh
+-rwxr-x--- 1 agent-dev agent-core  967 Oct  7 21:22 monitor-proc.sh
+-rwxr-x--- 1 agent-dev agent-core 4774 Oct  7 21:19 monitor.sh
+-rwxr-x--- 1 agent-dev agent-core 3959 Oct  7 21:19 monitor.sh.orig
+-rwxr-x--- 1 agent-dev agent-core 2039 Oct  7 21:19 report.sh
+
+== [4/5] B1-1 에서 물려받은 것들 그대로인지 확인 ==
+uid=1000(agent-admin) gid=1002(agent-admin) groups=1002(agent-admin),1000(agent-common),1001(agent-core)
+drwxr-x---  1 agent-admin agent-common  86 Oct  7 21:22 /home/agent-admin/agent-app
+drwxrwx---+ 1 agent-admin agent-core    44 Oct  7 21:15 /home/agent-admin/agent-app/api_keys
+drwxrwx---+ 1 agent-admin agent-common   0 Oct  7 21:22 /home/agent-admin/agent-app/upload_files
+drwxrwx---+ 1 agent-admin agent-core   856 Oct  7 21:20 /var/log/agent-app
+total 8
+-rw-r----- 1 agent-admin agent-core 19 Oct  7 21:19 secret.key
+-rw-r----- 1 agent-admin agent-core 19 Oct  7 21:19 t_secret.key
+SSH: port 20022
+방화벽: -P INPUT DROP
+스케줄러: 미가동
+
+== [5/5] 부트 조건 만족 여부 드라이런 (5초) ==
+>>> Starting Agent Boot Sequence...
+[1/6] Checking User Account               [OK]
+   ... Running as service user 'agent-admin' (uid=1000)
+[2/6] Verifying Environment Variables     [OK]
+   ... All required Envs correct
+[3/6] Checking Required Files             [OK]
+   ... Verified 'secret.key' with correct key string.
+[4/6] Checking Port Availability          [OK]
+   ... Port 15034 is available.
+[5/6] Verifying Log Permission            [OK]
+   ... Log directory is writable: /var/log/agent-app
+[6/6] Verifying Mission Environment       [OK]
+   ... MEMORY_LIMIT=512MB, CPU_MAX_OCCUPY=50%, MULTI_THREAD_ENABLE=False
+------------------------------------------------------------
+All Boot Checks Passed!
+Agent READY
+2026-10-07 21:22:21,462 [INFO] [SafetyGuard] Process priority lowered (nice=10).
+2026-10-07 21:22:21,462 [INFO] Agent listening at port 15034
+
+==================================================
+
+== DEPLOY DONE ==
+
+[1;36m===== 2~4/6 시나리오 oom (before) =====[0m
+########## SCENARIO oom / before ##########
+MEMORY_LIMIT=256 CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=false
+runtime dir: /var/log/agent-app/b1-2/oom
+-- 앱 실행 (agent-admin) --
+-- 프로세스 관제(2초 간격) 시작 --
+app parent=7685 worker=7689 (관측 대상=worker)
+-- 자력 종료 대기 (최대 170초) --
+프로세스 종료 @ 31s
+
+-- 앱 로그 마지막 14줄 --
+
+2026-10-07 21:22:30,514 [INFO] [MemoryWorker] Current Heap: 25MB
+2026-10-07 21:22:33,536 [INFO] [MemoryWorker] Current Heap: 50MB
+2026-10-07 21:22:36,588 [INFO] [MemoryWorker] Current Heap: 75MB
+2026-10-07 21:22:39,643 [INFO] [MemoryWorker] Current Heap: 100MB
+2026-10-07 21:22:42,699 [INFO] [MemoryWorker] Current Heap: 125MB
+2026-10-07 21:22:45,750 [INFO] [MemoryWorker] Current Heap: 150MB
+2026-10-07 21:22:48,804 [INFO] [MemoryWorker] Current Heap: 175MB
+2026-10-07 21:22:51,859 [INFO] [MemoryWorker] Current Heap: 200MB
+2026-10-07 21:22:54,912 [INFO] [MemoryWorker] Current Heap: 225MB
+2026-10-07 21:22:57,967 [INFO] [MemoryWorker] Current Heap: 250MB
+2026-10-07 21:23:01,021 [INFO] [MemoryWorker] Current Heap: 275MB
+2026-10-07 21:23:01,021 [CRITICAL] [MemoryGuard] Memory limit exceeded (275MB >= 256MB) / (Recommend Over 256MB)
+2026-10-07 21:23:01,021 [CRITICAL] [MemoryGuard] Self-terminating process 7689 to prevent system instability.
+
+-- 프로세스 관제 로그 (첫 3줄 / 마지막 6줄) --
+[2026-10-07 21:22:29] === Monitor started (interval=2s) ===
+[2026-10-07 21:22:29] PROCESS:agent-leak-app PID:7689 CPU/MEM/RSS/VSZ:  4.0  0.1 18376  28676
+[2026-10-07 21:22:31] PROCESS:agent-leak-app PID:7689 CPU/MEM/RSS/VSZ:  1.3  0.2 43980  54280
+[2026-10-07 21:22:53] PROCESS:agent-leak-app PID:7689 CPU/MEM/RSS/VSZ:  1.0  1.3 223208 233508
+[2026-10-07 21:22:55] PROCESS:agent-leak-app PID:7689 CPU/MEM/RSS/VSZ:  1.1  1.5 248812 259112
+[2026-10-07 21:22:57] PROCESS:agent-leak-app PID:7689 CPU/MEM/RSS/VSZ:  1.0  1.5 248812 259112
+[2026-10-07 21:22:59] PROCESS:agent-leak-app PID:7689 CPU/MEM/RSS/VSZ:  1.1  1.6 274416 284716
+[2026-10-07 21:23:01] PROCESS:agent-leak-app STATUS:NOT_FOUND
+[2026-10-07 21:23:01] === Process terminated. Monitor stopping. ===
+
+-- 레포 evidence/ 로 복사 --
+total 68
+-rw-rw-r-- 1 agent-dev agent-core 11115 Oct  7 18:12 app_after.log
+-rw-rw-r-- 1 agent-dev agent-core  2240 Oct  7 21:23 app_before.log
+-rw-rw-r-- 1 agent-dev agent-core   229 Oct  7 18:12 metadata_after.txt
+-rw-rw-r-- 1 agent-dev agent-core   269 Oct  7 21:23 metadata_before.txt
+-rw-rw-r-- 1 agent-dev agent-core  8400 Oct  7 18:12 monitor_after.log
+-rw-rw-r-- 1 agent-dev agent-core  1704 Oct  7 21:23 monitor_before.log
+-rw-rw-r-- 1 agent-dev agent-core 12806 Oct  7 18:12 process-samples_after.txt
+-rw-rw-r-- 1 agent-dev agent-core  2354 Oct  7 21:23 process-samples_before.txt
+-rw-rw-r-- 1 agent-dev agent-core  2886 Oct  7 18:12 run_after.log
+-rw-rw-r-- 1 agent-dev agent-core  2486 Oct  7 18:12 run_before.log
+########## DONE oom/before ##########
+
+[1;36m===== 2~4/6 시나리오 oom (after) =====[0m
+########## SCENARIO oom / after ##########
+MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=false
+runtime dir: /var/log/agent-app/b1-2/oom
+-- 앱 실행 (agent-admin) --
+-- 프로세스 관제(2초 간격) 시작 --
+app parent=8016 worker=8020 (관측 대상=worker)
+-- 자력 종료 대기 (최대 170초) --
+170초까지 생존 → SURVIVED (정상 운영으로 간주, 정리 kill)
+
+-- 앱 로그 마지막 14줄 --
+2026-10-07 21:25:44,870 [INFO] [MemoryWorker] Current Heap: 225MB
+2026-10-07 21:25:47,430 [INFO] [CpuWorker] Current Load: 15.32%
+2026-10-07 21:25:47,921 [INFO] [MemoryWorker] Current Heap: 250MB
+2026-10-07 21:25:50,548 [INFO] [CpuWorker] Current Load: 6.57%
+2026-10-07 21:25:50,977 [INFO] [MemoryWorker] Current Heap: 275MB
+2026-10-07 21:25:53,668 [INFO] [CpuWorker] Current Load: 5.05%
+2026-10-07 21:25:54,030 [INFO] [MemoryWorker] Current Heap: 300MB
+2026-10-07 21:25:55,781 [INFO] [CpuWorker] Cooldown complete (5.00%). Resuming load increase...
+2026-10-07 21:25:56,787 [INFO] [CpuWorker] Current Load: 5.00%
+2026-10-07 21:25:57,084 [INFO] [MemoryWorker] Current Heap: 325MB
+2026-10-07 21:25:59,906 [INFO] [CpuWorker] Current Load: 12.67%
+2026-10-07 21:26:00,137 [INFO] [MemoryWorker] Current Heap: 350MB
+2026-10-07 21:26:03,027 [INFO] [CpuWorker] Current Load: 17.62%
+2026-10-07 21:26:03,185 [INFO] [MemoryWorker] Current Heap: 375MB
+
+-- 프로세스 관제 로그 (첫 3줄 / 마지막 6줄) --
+[2026-10-07 21:23:06] === Monitor started (interval=2s) ===
+[2026-10-07 21:23:06] PROCESS:agent-leak-app PID:8020 CPU/MEM/RSS/VSZ:  3.0  0.1 18492  28676
+[2026-10-07 21:23:08] PROCESS:agent-leak-app PID:8020 CPU/MEM/RSS/VSZ:  1.6  0.2 44392 202768
+[2026-10-07 21:25:53] PROCESS:agent-leak-app PID:8020 CPU/MEM/RSS/VSZ:  1.9  1.8 300028 504844
+[2026-10-07 21:25:55] PROCESS:agent-leak-app PID:8020 CPU/MEM/RSS/VSZ:  1.9  1.9 325616 504844
+[2026-10-07 21:25:57] PROCESS:agent-leak-app PID:8020 CPU/MEM/RSS/VSZ:  1.9  2.1 351232 570380
+[2026-10-07 21:25:59] PROCESS:agent-leak-app PID:8020 CPU/MEM/RSS/VSZ:  1.9  2.1 351232 570380
+[2026-10-07 21:26:01] PROCESS:agent-leak-app PID:8020 CPU/MEM/RSS/VSZ:  1.9  2.2 376820 570380
+[2026-10-07 21:26:03] PROCESS:agent-leak-app PID:8020 CPU/MEM/RSS/VSZ:  1.9  2.4 402436 635916
+
+-- 레포 evidence/ 로 복사 --
+total 68
+-rw-rw-r-- 1 agent-dev agent-core 11212 Oct  7 21:26 app_after.log
+-rw-rw-r-- 1 agent-dev agent-core  2240 Oct  7 21:23 app_before.log
+-rw-rw-r-- 1 agent-dev agent-core   271 Oct  7 21:26 metadata_after.txt
+-rw-rw-r-- 1 agent-dev agent-core   269 Oct  7 21:23 metadata_before.txt
+-rw-rw-r-- 1 agent-dev agent-core  8495 Oct  7 21:26 monitor_after.log
+-rw-rw-r-- 1 agent-dev agent-core  1704 Oct  7 21:23 monitor_before.log
+-rw-rw-r-- 1 agent-dev agent-core 15386 Oct  7 21:26 process-samples_after.txt
+-rw-rw-r-- 1 agent-dev agent-core  2354 Oct  7 21:23 process-samples_before.txt
+-rw-rw-r-- 1 agent-dev agent-core  2886 Oct  7 18:12 run_after.log
+-rw-rw-r-- 1 agent-dev agent-core  2486 Oct  7 18:12 run_before.log
+########## DONE oom/after ##########
+
+[1;36m===== 2~4/6 시나리오 cpu (before) =====[0m
+########## SCENARIO cpu / before ##########
+MEMORY_LIMIT=512 CPU_MAX_OCCUPY=100 MULTI_THREAD_ENABLE=false
+runtime dir: /var/log/agent-app/b1-2/cpu
+-- 앱 실행 (agent-admin) --
+-- 프로세스 관제(2초 간격) 시작 --
+app parent=9515 worker=9519 (관측 대상=worker)
+-- 자력 종료 대기 (최대 170초) --
+프로세스 종료 @ 25s
+
+-- 앱 로그 마지막 14줄 --
+ >>> SYSTEM STATUS: STABLE. STARTING WORKLOAD MONITORING...
+==================================================
+
+2026-10-07 21:26:09,318 [INFO] [CpuWorker] Started. Maximum CPU Limit: 100%
+2026-10-07 21:26:09,319 [INFO] [CpuWorker] Current Load: 5.00%
+2026-10-07 21:26:12,437 [INFO] [CpuWorker] Current Load: 8.23%
+2026-10-07 21:26:15,558 [INFO] [CpuWorker] Current Load: 10.54%
+2026-10-07 21:26:18,676 [INFO] [CpuWorker] Current Load: 19.11%
+2026-10-07 21:26:21,796 [INFO] [CpuWorker] Current Load: 26.55%
+2026-10-07 21:26:24,917 [INFO] [CpuWorker] Current Load: 35.92%
+2026-10-07 21:26:28,036 [INFO] [CpuWorker] Current Load: 39.85%
+2026-10-07 21:26:31,157 [INFO] [CpuWorker] Current Load: 46.99%
+2026-10-07 21:26:34,277 [INFO] [CpuWorker] Current Load: 54.76%
+2026-10-07 21:26:34,379 [CRITICAL] [CpuWorker] CPU Threshold Violated! (54.760000000000005%).
+
+-- 프로세스 관제 로그 (첫 3줄 / 마지막 6줄) --
+[2026-10-07 21:26:08] === Monitor started (interval=2s) ===
+[2026-10-07 21:26:08] PROCESS:agent-leak-app PID:9519 CPU/MEM/RSS/VSZ:  3.0  0.1 18596  28676
+[2026-10-07 21:26:10] PROCESS:agent-leak-app PID:9519 CPU/MEM/RSS/VSZ:  1.3  0.1 18660  28676
+[2026-10-07 21:26:26] PROCESS:agent-leak-app PID:9519 CPU/MEM/RSS/VSZ:  0.7  0.1 18660  28676
+[2026-10-07 21:26:28] PROCESS:agent-leak-app PID:9519 CPU/MEM/RSS/VSZ:  0.8  0.1 18660  28676
+[2026-10-07 21:26:30] PROCESS:agent-leak-app PID:9519 CPU/MEM/RSS/VSZ:  0.7  0.1 18660  28676
+[2026-10-07 21:26:32] PROCESS:agent-leak-app PID:9519 CPU/MEM/RSS/VSZ:  0.9  0.1 18660  28676
+[2026-10-07 21:26:34] PROCESS:agent-leak-app STATUS:NOT_FOUND
+[2026-10-07 21:26:34] === Process terminated. Monitor stopping. ===
+
+-- 레포 evidence/ 로 복사 --
+total 52
+-rw-rw-r-- 1 agent-dev agent-core 7193 Oct  7 18:12 app_after-probe.log
+-rw-rw-r-- 1 agent-dev agent-core 2167 Oct  7 18:12 app_before-probe.log
+-rw-rw-r-- 1 agent-dev agent-core 2039 Oct  7 21:26 app_before.log
+-rw-rw-r-- 1 agent-dev agent-core 1333 Oct  7 18:12 cpu-probe_after.csv
+-rw-rw-r-- 1 agent-dev agent-core 4650 Oct  7 18:12 cpu-probe_after.txt
+-rw-rw-r-- 1 agent-dev agent-core  659 Oct  7 18:12 cpu-probe_before.csv
+-rw-rw-r-- 1 agent-dev agent-core 2902 Oct  7 18:12 cpu-probe_before.txt
+-rw-rw-r-- 1 agent-dev agent-core  270 Oct  7 21:26 metadata_before.txt
+-rw-rw-r-- 1 agent-dev agent-core 1412 Oct  7 21:26 monitor_before.log
+-rw-rw-r-- 1 agent-dev agent-core 1289 Oct  7 21:26 process-samples_before.txt
+-rw-rw-r-- 1 agent-dev agent-core 2588 Oct  7 18:12 run_before.log
+########## DONE cpu/before ##########
+
+[1;36m===== 2~4/6 시나리오 cpu (after) =====[0m
+########## SCENARIO cpu / after ##########
+MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=false
+runtime dir: /var/log/agent-app/b1-2/cpu
+-- 앱 실행 (agent-admin) --
+-- 프로세스 관제(2초 간격) 시작 --
+app parent=9784 worker=9788 (관측 대상=worker)
+-- 자력 종료 대기 (최대 170초) --
+170초까지 생존 → SURVIVED (정상 운영으로 간주, 정리 kill)
+
+-- 앱 로그 마지막 14줄 --
+2026-10-07 21:29:16,707 [INFO] [CpuWorker] Current Load: 50.00%
+2026-10-07 21:29:17,182 [INFO] [MemoryWorker] Current Heap: 225MB
+2026-10-07 21:29:19,814 [INFO] [CpuWorker] Current Load: 44.71%
+2026-10-07 21:29:20,231 [INFO] [MemoryWorker] Current Heap: 250MB
+2026-10-07 21:29:22,921 [INFO] [CpuWorker] Current Load: 39.91%
+2026-10-07 21:29:23,275 [INFO] [MemoryWorker] Current Heap: 275MB
+2026-10-07 21:29:26,035 [INFO] [CpuWorker] Current Load: 34.11%
+2026-10-07 21:29:26,306 [INFO] [MemoryWorker] Current Heap: 300MB
+2026-10-07 21:29:29,151 [INFO] [CpuWorker] Current Load: 24.36%
+2026-10-07 21:29:29,354 [INFO] [MemoryWorker] Current Heap: 325MB
+2026-10-07 21:29:32,261 [INFO] [CpuWorker] Current Load: 16.14%
+2026-10-07 21:29:32,401 [INFO] [MemoryWorker] Current Heap: 350MB
+2026-10-07 21:29:35,374 [INFO] [CpuWorker] Current Load: 9.50%
+2026-10-07 21:29:35,453 [INFO] [MemoryWorker] Current Heap: 375MB
+
+-- 프로세스 관제 로그 (첫 3줄 / 마지막 6줄) --
+[2026-10-07 21:26:38] === Monitor started (interval=2s) ===
+[2026-10-07 21:26:38] PROCESS:agent-leak-app PID:9788 CPU/MEM/RSS/VSZ:  5.2  0.1 18540  28676
+[2026-10-07 21:26:40] PROCESS:agent-leak-app PID:9788 CPU/MEM/RSS/VSZ:  3.0  0.2 44376 201744
+[2026-10-07 21:29:25] PROCESS:agent-leak-app PID:9788 CPU/MEM/RSS/VSZ:  1.9  1.8 300160 503820
+[2026-10-07 21:29:27] PROCESS:agent-leak-app PID:9788 CPU/MEM/RSS/VSZ:  1.9  1.9 325748 503820
+[2026-10-07 21:29:29] PROCESS:agent-leak-app PID:9788 CPU/MEM/RSS/VSZ:  1.9  2.1 351364 569356
+[2026-10-07 21:29:31] PROCESS:agent-leak-app PID:9788 CPU/MEM/RSS/VSZ:  1.9  2.1 351364 569356
+[2026-10-07 21:29:33] PROCESS:agent-leak-app PID:9788 CPU/MEM/RSS/VSZ:  1.9  2.2 376952 569356
+[2026-10-07 21:29:36] PROCESS:agent-leak-app PID:9788 CPU/MEM/RSS/VSZ:  1.9  2.4 402568 634892
+
+-- 레포 evidence/ 로 복사 --
+total 96
+-rw-rw-r-- 1 agent-dev agent-core  7193 Oct  7 18:12 app_after-probe.log
+-rw-r--r-- 1 agent-dev agent-core 11118 Oct  7 21:29 app_after.log
+-rw-rw-r-- 1 agent-dev agent-core  2167 Oct  7 18:12 app_before-probe.log
+-rw-rw-r-- 1 agent-dev agent-core  2039 Oct  7 21:26 app_before.log
+-rw-rw-r-- 1 agent-dev agent-core  1333 Oct  7 18:12 cpu-probe_after.csv
+-rw-rw-r-- 1 agent-dev agent-core  4650 Oct  7 18:12 cpu-probe_after.txt
+-rw-rw-r-- 1 agent-dev agent-core   659 Oct  7 18:12 cpu-probe_before.csv
+-rw-rw-r-- 1 agent-dev agent-core  2902 Oct  7 18:12 cpu-probe_before.txt
+-rw-r----- 1 agent-dev agent-core   271 Oct  7 21:29 metadata_after.txt
+-rw-rw-r-- 1 agent-dev agent-core   270 Oct  7 21:26 metadata_before.txt
+-rw-r----- 1 agent-dev agent-core  8495 Oct  7 21:29 monitor_after.log
+-rw-rw-r-- 1 agent-dev agent-core  1412 Oct  7 21:26 monitor_before.log
+-rw-r----- 1 agent-dev agent-core 15387 Oct  7 21:29 process-samples_after.txt
+-rw-rw-r-- 1 agent-dev agent-core  1289 Oct  7 21:26 process-samples_before.txt
+-rw-rw-r-- 1 agent-dev agent-core  2588 Oct  7 18:12 run_before.log
+########## DONE cpu/after ##########
+
+[1;36m===== 2~4/6 시나리오 deadlock (before) =====[0m
+########## SCENARIO deadlock / before ##########
+MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=true
+runtime dir: /var/log/agent-app/b1-2/deadlock
+-- 앱 실행 (agent-admin) --
+-- 프로세스 관제(2초 간격) 시작 --
+app parent=11283 worker=11287 (관측 대상=worker)
+-- 데드락 관측: 90초 동안 10초 간격 표본 (PID 는 있는데 CPU/MEM 이 정체되는지 확인) --
+-- 스레드 스택 캡처 --
+
+================ 관측값 기반 판정 ================
+total_threads=4 futex_wait_threads=3 wait4_threads=1
+판정: 워커 스레드 3 개가 futex(락) 대기 중 → 교착상태(순환 대기) 정황 성립
+
+=== Capture complete: /var/log/agent-app/b1-2/deadlock/stacktrace_before.txt ===
+-- 관측 종료, 프로세스 정리(kill -9) --
+
+-- 앱 로그 마지막 14줄 --
+
+2026-10-07 21:29:41,673 [WARNING] [AgentWorker] Initializing concurrent transaction processors...
+2026-10-07 21:29:41,673 [WARNING] [System] CAUTION: Strict resource locking is enabled.
+2026-10-07 21:29:46,698 [INFO] [Worker-Thread-1] Process Started. Attempting to lock [Shared_Memory_A]...
+2026-10-07 21:29:46,699 [INFO] [AgentWorker][Worker-Thread-1] LOCK ACQUIRED: [Shared_Memory_A]. (Holding...)
+2026-10-07 21:29:46,699 [INFO] [AgentWorker][Worker-Thread-1] Processing critical data in Memory A...
+2026-10-07 21:29:46,699 [INFO] [AgentWorker][Worker-Thread-2] Process Started. Attempting to lock [Socket_Pool_B]...
+2026-10-07 21:29:46,699 [INFO] [AgentWorker][Worker-Thread-2] LOCK ACQUIRED: [Socket_Pool_B]. (Holding...)
+2026-10-07 21:29:46,700 [INFO] [AgentWorker][Worker-Thread-2] Establishing network connections in Pool B...
+2026-10-07 21:29:46,700 [INFO] [AgentWorker] Waiting for worker threads to complete transactions...
+2026-10-07 21:29:48,709 [INFO] [AgentWorker][Worker-Thread-1] Need resource [Socket_Pool_B] to finish job.
+2026-10-07 21:29:48,710 [INFO] [AgentWorker][Worker-Thread-1] WAITING for [Socket_Pool_B]... (Status: BLOCKED)
+2026-10-07 21:29:48,710 [INFO] [AgentWorker][Worker-Thread-2] Need resource [Shared_Memory_A] to write logs.
+2026-10-07 21:29:48,710 [INFO] [AgentWorker][Worker-Thread-2] WAITING for [Shared_Memory_A]... (Status: BLOCKED)
+
+-- 프로세스 관제 로그 (첫 3줄 / 마지막 6줄) --
+[2026-10-07 21:29:40] === Monitor started (interval=2s) ===
+[2026-10-07 21:29:40] PROCESS:agent-leak-app PID:11287 CPU/MEM/RSS/VSZ:  4.2  0.1 18548  28676
+[2026-10-07 21:29:42] PROCESS:agent-leak-app PID:11287 CPU/MEM/RSS/VSZ:  1.3  0.1 18548  28676
+[2026-10-07 21:31:05] PROCESS:agent-leak-app PID:11287 CPU/MEM/RSS/VSZ:  0.0  0.1 18612 176140
+[2026-10-07 21:31:07] PROCESS:agent-leak-app PID:11287 CPU/MEM/RSS/VSZ:  0.0  0.1 18612 176140
+[2026-10-07 21:31:09] PROCESS:agent-leak-app PID:11287 CPU/MEM/RSS/VSZ:  0.0  0.1 18612 176140
+[2026-10-07 21:31:11] PROCESS:agent-leak-app PID:11287 CPU/MEM/RSS/VSZ:  0.0  0.1 18612 176140
+[2026-10-07 21:31:13] PROCESS:agent-leak-app PID:11287 CPU/MEM/RSS/VSZ:  0.0  0.1 18612 176140
+[2026-10-07 21:31:15] PROCESS:agent-leak-app PID:11287 CPU/MEM/RSS/VSZ:  0.0  0.1 18612 176140
+
+-- 레포 evidence/ 로 복사 --
+total 92
+-rw-rw-r-- 1 agent-dev agent-core 11118 Oct  7 18:12 app_after.log
+-rw-rw-r-- 1 agent-dev agent-core  2645 Oct  7 21:31 app_before.log
+-rw-rw-r-- 1 agent-dev agent-core   279 Oct  7 18:12 metadata_after.txt
+-rw-rw-r-- 1 agent-dev agent-core   282 Oct  7 21:31 metadata_before.txt
+-rw-rw-r-- 1 agent-dev agent-core  8400 Oct  7 18:12 monitor_after.log
+-rw-rw-r-- 1 agent-dev agent-core  4620 Oct  7 21:31 monitor_before.log
+-rw-rw-r-- 1 agent-dev agent-core 15380 Oct  7 18:12 process-samples_after.txt
+-rw-rw-r-- 1 agent-dev agent-core 11593 Oct  7 21:31 process-samples_before.txt
+-rw-rw-r-- 1 agent-dev agent-core  2982 Oct  7 18:12 run_after.log
+-rw-rw-r-- 1 agent-dev agent-core  3568 Oct  7 18:12 run_before.log
+-rw-rw-r-- 1 agent-dev agent-core 11119 Oct  7 21:31 stacktrace_before.txt
+########## DONE deadlock/before ##########
+
+[1;36m===== 2~4/6 시나리오 deadlock (after) =====[0m
+########## SCENARIO deadlock / after ##########
+MEMORY_LIMIT=512 CPU_MAX_OCCUPY=50 MULTI_THREAD_ENABLE=false
+runtime dir: /var/log/agent-app/b1-2/deadlock
+-- 앱 실행 (agent-admin) --
+-- 프로세스 관제(2초 간격) 시작 --
+app parent=12127 worker=12131 (관측 대상=worker)
+-- 자력 종료 대기 (최대 170초) --
+170초까지 생존 → SURVIVED (정상 운영으로 간주, 정리 kill)
+
+-- 앱 로그 마지막 14줄 --
+2026-10-07 21:33:58,669 [INFO] [CpuWorker] Current Load: 36.55%
+2026-10-07 21:33:59,226 [INFO] [MemoryWorker] Current Heap: 225MB
+2026-10-07 21:34:01,787 [INFO] [CpuWorker] Current Load: 34.51%
+2026-10-07 21:34:02,270 [INFO] [MemoryWorker] Current Heap: 250MB
+2026-10-07 21:34:04,905 [INFO] [CpuWorker] Current Load: 28.35%
+2026-10-07 21:34:05,325 [INFO] [MemoryWorker] Current Heap: 275MB
+2026-10-07 21:34:08,022 [INFO] [CpuWorker] Current Load: 22.19%
+2026-10-07 21:34:08,379 [INFO] [MemoryWorker] Current Heap: 300MB
+2026-10-07 21:34:11,139 [INFO] [CpuWorker] Current Load: 19.77%
+2026-10-07 21:34:11,430 [INFO] [MemoryWorker] Current Heap: 325MB
+2026-10-07 21:34:14,260 [INFO] [CpuWorker] Current Load: 16.23%
+2026-10-07 21:34:14,483 [INFO] [MemoryWorker] Current Heap: 350MB
+2026-10-07 21:34:17,377 [INFO] [CpuWorker] Current Load: 15.58%
+2026-10-07 21:34:17,534 [INFO] [MemoryWorker] Current Heap: 375MB
+
+-- 프로세스 관제 로그 (첫 3줄 / 마지막 6줄) --
+[2026-10-07 21:31:20] === Monitor started (interval=2s) ===
+[2026-10-07 21:31:20] PROCESS:agent-leak-app PID:12131 CPU/MEM/RSS/VSZ:  3.0  0.1 18464  28676
+[2026-10-07 21:31:22] PROCESS:agent-leak-app PID:12131 CPU/MEM/RSS/VSZ:  3.0  0.2 44364 202768
+[2026-10-07 21:34:07] PROCESS:agent-leak-app PID:12131 CPU/MEM/RSS/VSZ:  2.0  1.8 299980 504844
+[2026-10-07 21:34:09] PROCESS:agent-leak-app PID:12131 CPU/MEM/RSS/VSZ:  2.0  1.9 325568 504844
+[2026-10-07 21:34:11] PROCESS:agent-leak-app PID:12131 CPU/MEM/RSS/VSZ:  2.0  2.1 351184 570380
+[2026-10-07 21:34:14] PROCESS:agent-leak-app PID:12131 CPU/MEM/RSS/VSZ:  2.0  2.1 351184 570380
+[2026-10-07 21:34:16] PROCESS:agent-leak-app PID:12131 CPU/MEM/RSS/VSZ:  2.0  2.2 376772 570380
+[2026-10-07 21:34:18] PROCESS:agent-leak-app PID:12131 CPU/MEM/RSS/VSZ:  2.0  2.4 402388 635916
+
+-- 레포 evidence/ 로 복사 --
+total 92
+-rw-rw-r-- 1 agent-dev agent-core 11119 Oct  7 21:34 app_after.log
+-rw-rw-r-- 1 agent-dev agent-core  2645 Oct  7 21:31 app_before.log
+-rw-rw-r-- 1 agent-dev agent-core   279 Oct  7 21:34 metadata_after.txt
+-rw-rw-r-- 1 agent-dev agent-core   282 Oct  7 21:31 metadata_before.txt
+-rw-rw-r-- 1 agent-dev agent-core  8584 Oct  7 21:34 monitor_after.log
+-rw-rw-r-- 1 agent-dev agent-core  4620 Oct  7 21:31 monitor_before.log
+-rw-rw-r-- 1 agent-dev agent-core 15389 Oct  7 21:34 process-samples_after.txt
+-rw-rw-r-- 1 agent-dev agent-core 11593 Oct  7 21:31 process-samples_before.txt
+-rw-rw-r-- 1 agent-dev agent-core  2982 Oct  7 18:12 run_after.log
+-rw-rw-r-- 1 agent-dev agent-core  3568 Oct  7 18:12 run_before.log
+-rw-rw-r-- 1 agent-dev agent-core 11119 Oct  7 21:31 stacktrace_before.txt
+########## DONE deadlock/after ##########
+
+[1;36m===== 5/6 [보너스] 스케줄링 알고리즘 추론 실측 =====[0m
+############ B1-2 보너스: 스케줄링 알고리즘 추론 실측 ############
+측정 시각: 2026-10-07 21:34:19 KST · 측정 길이: 12s
+
+=== [1] 커널 & 스케줄러 클래스 근거 ===
+uname -r      : 6.17.8-orbstack-00308-g8f9c941121b1
+nproc         : 6
+CPU 모델      : Intel(R) Core(TM) i5-8600 CPU @ 3.10GHz
+--- /proc/sys/kernel/sched_* (CFS/RT/DL 튜너블 존재 여부) ---
+  sched_autogroup_enabled = 1
+  sched_cfs_bandwidth_slice_us = 5000
+  sched_deadline_period_max_us = 4194304
+  sched_deadline_period_min_us = 100
+  sched_rr_timeslice_ms = 100
+  sched_rt_period_us = 1000000
+  sched_rt_runtime_us = 950000
+--- /sys/kernel/sched_debug 첫 12줄 ---
+  (읽기 불가)
+
+=== [2] cgroup CPU 제어 상태 (대역폭 제한이 걸려 있는가) ===
+cgroup 경로: /sys/fs/cgroup//.lxc
+--- cpu.max ---
+max 100000
+--- cpu.weight ---
+100
+--- cpu.stat ---
+usage_usec 86806342
+user_usec 65764880
+system_usec 21041462
+nice_usec 41564000
+nr_periods 0
+nr_throttled 0
+throttled_usec 0
+nr_bursts 0
+burst_usec 0
+
+=== [3] agent-leak-app 기동 (CPU_MAX_OCCUPY=50) ===
+관측 대상 PID=13650 (VmRSS=18552 KB)
+램프업 대기 30s — CpuWorker 가 5% 에서 서서히 오르는 것을 실측으로 확인했으므로 정상 구간까지 대기
+
+=== [4] 스레드별 스케줄링 정책·우선순위 (chrt) ===
+chrt: /usr/bin/chrt
+TID      COMM                 chrt(policy/prio)        NICE   RT_PRIO  WCHAN
+13650    agent-leak-app       SCHED_OTHER / 0          10     0        __futex_wait
+13665    agent-leak-app       SCHED_OTHER / 0          10     0        do_select
+13666    agent-leak-app       SCHED_OTHER / 0          10     0        do_select
+
+=== [5] /proc/<pid>/sched — 스케줄러 내부 통계 ===
+agent-leak-app (13650, #threads: 3)
+-------------------------------------------------------------------
+se.exec_start                                :       2010294.261128
+se.vruntime                                  :        136616.972113
+se.sum_exec_runtime                          :            52.590914
+se.nr_migrations                             :                    0
+nr_switches                                  :                   28
+nr_voluntary_switches                        :                   28
+nr_involuntary_switches                      :                    0
+se.load.weight                               :               112640
+se.avg.load_sum                              :                  788
+se.avg.runnable_sum                          :               808234
+se.avg.util_sum                              :               808234
+se.avg.load_avg                              :                    1
+se.avg.runnable_avg                          :                   17
+se.avg.util_avg                              :                   17
+se.avg.last_update_time                      :        2010294260736
+se.avg.util_est                              :                   18
+policy                                       :                    0
+prio                                         :                  130
+se.slice                                     :              2100000
+clock-delta                                  :                   13
+
+=== [6] 12s 동안 스레드별 CPU 시간 증분 (utime+stime, USER_HZ=100) ===
+경과 wall: 12.004s
+TID      COMM                  틱증분       CPU%
+13650    agent-leak-app                0       0.00
+13665    agent-leak-app               14       1.17
+13666    agent-leak-app               14       1.17
+---
+프로세스 전체 틱 증분: 28 → OS 실측 CPU 점유율 2.33%
+
+=== [6b] 자발적/비자발적 컨텍스트 스위치 (duty-cycle 판별 근거) ===
+TID      COMM                 voluntary    nonvoluntary   wchan
+13650    agent-leak-app       28           0              __futex_wait
+13665    agent-leak-app       16           1              do_select
+13666    agent-leak-app       42           1              do_select
+→ 자발적 스위치가 압도적으로 많으면 '일정 주기마다 스스로 잠드는 duty-cycle' 방식이다.
+
+=== [6c] 워커 스레드가 실제로 무엇을 하는가 (syscall 샘플링, 0.2초 x 10회) ===
+--- TID 13665 (agent-leak-app) ---
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+--- TID 13666 (agent-leak-app) ---
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+→ x86-64 syscall 번호: 270=pselect6(타임아웃 대기), 23=select, 35=nanosleep, 202=futex, 0=read, 1=write
+
+=== [7] 앱이 스스로 보고한 CPU 점유율 (같은 구간 로그) ===
+2026-10-07 21:34:48,492 [INFO] [CpuWorker] Current Load: 42.91%
+2026-10-07 21:34:51,609 [INFO] [CpuWorker] Current Load: 44.45%
+2026-10-07 21:34:53,721 [INFO] [CpuWorker] Peak reached (50.00%). Starting cooldown...
+2026-10-07 21:34:54,727 [INFO] [CpuWorker] Current Load: 50.00%
+2026-10-07 21:34:57,843 [INFO] [CpuWorker] Current Load: 44.18%
+2026-10-07 21:35:00,962 [INFO] [CpuWorker] Current Load: 41.82%
+2026-10-07 21:35:04,083 [INFO] [CpuWorker] Current Load: 40.07%
+2026-10-07 21:35:07,201 [INFO] [CpuWorker] Current Load: 36.86%
+
+=== [8] cgroup cpu.stat 재측정 (throttling 발생 여부) ===
+usage_usec 88190089
+user_usec 66527957
+system_usec 21662132
+nice_usec 42060000
+nr_periods 0
+nr_throttled 0
+throttled_usec 0
+nr_bursts 0
+burst_usec 0
+
+=== [9] 대조군: 순수 CPU 루프 1개 (외부 기준) ===
+대조군(싱글 스레드 busy loop) CPU 점유율: 100.17%
+
+=== [10] 정리 ===
+앱 종료. 원본 저장: /var/log/agent-app/b1-2/bonus/scheduling-probe.txt
+== SCHEDULING PROBE DONE ==
+
+[1;36m===== 6/6 B1-1 상태로 원복 + 재검증 =====[0m
+== leak-app 종료 ==
+== B1-1 agent-app 재기동 ==
+Agent READY: 확인
+--- 프로세스 소유자 (root 아님 확인) ---
+    PID USER     GROUP        ELAPSED CMD
+  13920 agent-a+ agent-a+       00:01 /usr/local/bin/agent-app
+--- 리슨 상태 ---
+tcp   LISTEN 0      1                   0.0.0.0:15034      0.0.0.0:*    users:(("agent-app",pid=13924,fd=4))     
+
+== APP RUN DONE ==
+== B1-1 체크리스트 재검증 ==
+35K /var/log/agent-app/rotation-test.log.20261007212002.gz
+35K /var/log/agent-app/rotation-test.log.20261007212004.gz
+35K /var/log/agent-app/rotation-test.log.20261007212006.gz
+35K /var/log/agent-app/rotation-test.log.20261007212008.gz
+35K /var/log/agent-app/rotation-test.log.20261007212011.gz
+[PASS] 로테이션 실측 로그 존재
+[PASS] 10MB 도달 시 회전 발생(.gz)
+[PASS] 회전본 10개 유지 정책
+[PASS] 회전본 gzip 무결성
+
+############ RESULT: PASS=36 FAIL=0 ############
+B1-1 VERIFICATION: ALL PASS
+== RESTORE DONE ==
+
+[1;36m===== 요약 =====[0m
+증거 디렉토리: /root/b1/B1-2/lab/evidence/{oom,cpu,deadlock}/ · 40-scheduling-probe.txt
+이슈 리포트   : /root/b1/B1-2/lab/issues/issue-{1-oom,2-cpu,3-deadlock}.md
+              /root/b1/B1-2/lab/issues/bonus-scheduling-inference.md
+B1-1 재검증   : B1-1 VERIFICATION: ALL PASS
+== PHASE2 (B1-2) DONE ==

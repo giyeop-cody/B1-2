@@ -1,0 +1,645 @@
+########## [0/10] 바이너리 준비 ##########
+-- B1-1 이미 있음 --
+-- B1-2 이미 있음 --
+
+== 준비된 바이너리 (e_machine: 0x3e=x86-64, 0xb7=AArch64) ==
+/root/b1-src/B1-1/agent-app-linux-x86          0x3e00
+/root/b1-src/B1-2/agent-leak-app-x86           0x3e00
+/root/b1-src/B1-2/agent-leak-app-arm64         0xb700
+
+주의: B1-1 제공 앱은 x86-64 판만 있다(agent-app-linux-x86). ARM VM(예: Oracle Always Free A1)에서는
+      B1-1 이 그대로 안 돌아간다 — x86 VM 을 쓰거나 B1-2 의 agent-leak-app-arm64 만 사용.
+== BOOTSTRAP DONE ==
+
+########## [1a/10] cron 데몬 준비 (apt 불가 → dcron 소스 빌드) ##########
+이미 설치·가동 중: /usr/bin/crontab · 데몬 pid=339
+
+########## [1b/10] 방화벽 도구 준비 (apt 불가 → ufw 소스 설치) ##########
+이미 설치됨: /usr/sbin/ufw → ufw 0.36.2
+
+########## 01-provision ##########
+== [1/6] 그룹 생성 (agent-common, agent-core) ==
+agent-common:x:1000:agent-admin,agent-dev,agent-test
+agent-core:x:1001:agent-admin,agent-dev
+
+== [2/6] 계정 생성 (agent-admin, agent-dev, agent-test) ==
+uid=1000(agent-admin) gid=1002(agent-admin) groups=1002(agent-admin),1000(agent-common),1001(agent-core)
+uid=1001(agent-dev) gid=1003(agent-dev) groups=1003(agent-dev),1000(agent-common),1001(agent-core)
+uid=1002(agent-test) gid=1004(agent-test) groups=1004(agent-test),1000(agent-common)
+
+== [3/6] 그룹 소속 (agent-common: admin/dev/test · agent-core: admin/dev) ==
+uid=1000(agent-admin) gid=1002(agent-admin) groups=1002(agent-admin),1000(agent-common),1001(agent-core)
+uid=1001(agent-dev) gid=1003(agent-dev) groups=1003(agent-dev),1000(agent-common),1001(agent-core)
+uid=1002(agent-test) gid=1004(agent-test) groups=1004(agent-test),1000(agent-common)
+--- 그룹 원장 (getent group) ---
+agent-common:x:1000:agent-admin,agent-dev,agent-test
+agent-core:x:1001:agent-admin,agent-dev
+
+== [4/6] 디렉토리 구조 (/home/agent-admin/agent-app 기준) ==
+drwxr-x---  1 agent-admin agent-common 58 Oct  7 21:15 /home/agent-admin/agent-app
+drwxrwx---+ 1 agent-admin agent-core   44 Oct  7 21:15 /home/agent-admin/agent-app/api_keys
+drwxr-x---  1 agent-dev   agent-core    0 Oct  7 21:15 /home/agent-admin/agent-app/bin
+drwxrwx---+ 1 agent-admin agent-common  0 Oct  7 21:16 /home/agent-admin/agent-app/upload_files
+drwxrwx---+ 1 agent-admin agent-core    0 Oct  7 21:15 /var/log/agent-app
+
+== [5/6] 키 파일 생성 ==
+total 8
+-rw-r----- 1 agent-admin agent-core 19 Oct  7 21:19 secret.key
+-rw-r----- 1 agent-admin agent-core 19 Oct  7 21:19 t_secret.key
+
+== [6/6] 실행 환경 고정 (env.sh + .bash_profile) ==
+# B1-1/B1-2 agent 앱 실행 환경 (source 해서 사용)
+export AGENT_HOME="/home/agent-admin/agent-app"
+export AGENT_PORT=15034
+export AGENT_UPLOAD_DIR="/home/agent-admin/agent-app/upload_files"
+export AGENT_KEY_PATH="/home/agent-admin/agent-app/api_keys"
+export AGENT_LOG_DIR="/var/log/agent-app"
+# B1-2 시나리오 변수 (기본값: 정상 운영)
+export MEMORY_LIMIT="${MEMORY_LIMIT:-256}"
+export CPU_MAX_OCCUPY="${CPU_MAX_OCCUPY:-50}"
+export MULTI_THREAD_ENABLE="${MULTI_THREAD_ENABLE:-false}"
+
+== PROVISION DONE ==
+
+########## 01b-acl ##########
+== [0/4] 환경 실측 ==
+setfacl: /usr/bin/setfacl
+getfacl: /usr/bin/getfacl
+libacl : libacl.so.1.1.2302
+ii  libacl1:amd64                 2.3.2-1build1.1                   amd64        access control list - shared library
+
+== [1/4] 접근 ACL + 기본(상속) ACL 적용 ==
+[OK] /home/agent-admin ACL 설정: u::rwx,g::r-x,g:agent-common:--x,o::---
+--- 읽기 검증 (acl_get_file) ---
+user::rwx
+group::r-x
+group:agent-common:--x
+mask::r-x
+other::---
+
+[OK] /home/agent-admin/agent-app/upload_files ACL 설정: u::rwx,g::rwx,g:agent-common:rwx,o::---
+--- 읽기 검증 (acl_get_file) ---
+user::rwx
+group::rwx
+group:agent-common:rwx
+mask::rwx
+other::---
+
+[OK] /home/agent-admin/agent-app/upload_files default ACL 설정: u::rwx,g::rwx,g:agent-common:rwx,o::---
+--- 읽기 검증 (acl_get_file) ---
+user::rwx
+group::rwx
+group:agent-common:rwx
+mask::rwx
+other::---
+
+[OK] /home/agent-admin/agent-app/api_keys ACL 설정: u::rwx,g::rwx,g:agent-core:rwx,o::---
+--- 읽기 검증 (acl_get_file) ---
+user::rwx
+group::rwx
+group:agent-core:rwx
+mask::rwx
+other::---
+
+[OK] /home/agent-admin/agent-app/api_keys default ACL 설정: u::rwx,g::rwx,g:agent-core:rwx,o::---
+--- 읽기 검증 (acl_get_file) ---
+user::rwx
+group::rwx
+group:agent-core:rwx
+mask::rwx
+other::---
+
+[OK] /var/log/agent-app ACL 설정: u::rwx,g::rwx,g:agent-core:rwx,o::---
+--- 읽기 검증 (acl_get_file) ---
+user::rwx
+group::rwx
+group:agent-core:rwx
+mask::rwx
+other::---
+
+[OK] /var/log/agent-app default ACL 설정: u::rwx,g::rwx,g:agent-core:rwx,o::---
+--- 읽기 검증 (acl_get_file) ---
+user::rwx
+group::rwx
+group:agent-core:rwx
+mask::rwx
+other::---
+
+
+== [2/4] 독립 검증 ① — GNU ls 의 '+' 표시 (ACL 이 모드비트와別に 존재한다는 뜻) ==
+drwxrwx---+ 1 agent-admin agent-core   44 Oct  7 21:15 /home/agent-admin/agent-app/api_keys
+drwxrwx---+ 1 agent-admin agent-common  0 Oct  7 21:16 /home/agent-admin/agent-app/upload_files
+drwxrwx---+ 1 agent-admin agent-core    0 Oct  7 21:15 /var/log/agent-app
+-- 읽기 검증: /home/agent-admin/agent-app/api_keys 기본 ACL --
+# file: /home/agent-admin/agent-app/api_keys (default)
+user::rwx
+group::rwx
+group:agent-core:rwx
+mask::rwx
+other::---
+
+
+== [3/4] 독립 검증 ② — 신규 파일 권한 상속 (umask 022 상태) ==
+-rw-rw----+ 1 agent-dev agent-dev 3 Oct  7 21:19 /home/agent-admin/agent-app/upload_files/acl_inherit_test.txt
+[PASS] 그룹 쓰기 상속됨 (-rw-rw----) — umask 022 만으로는 -rw-r--r-- 가 됐을 것
+-- 상속된 ACL (소유 그룹이 agent-dev 인데도 agent-common 항목이 붙어 있다) --
+# file: /home/agent-admin/agent-app/upload_files/acl_inherit_test.txt
+user::rw-
+group::rwx	#effective:rw-
+group:agent-common:rwx	#effective:rw-
+mask::rw-
+other::---
+
+-- 대조군: 기본 ACL 없는 디렉토리에서 같은 작업 --
+-rw-r--r-- agent-dev:agent-dev /tmp/acl-control/no_acl.txt
+
+== [4/4] 독립 검증 ③ — 실제 계정 접근 테스트 ==
+--- agent-test(agent-common 만) 가 upload_files 에 쓰기 → 성공해야 정상 ---
+[PASS] agent-test 쓰기 성공
+-rw-rw----+ 1 agent-test agent-test 8 Oct  7 21:19 /home/agent-admin/agent-app/upload_files/by_agent_test.txt
+--- agent-test 가 api_keys/secret.key 읽기 → 실패해야 정상 (agent-core 전용) ---
+[PASS] agent-test 접근 거부 (agent-core 전용 정책 유지)
+--- agent-dev(agent-core) 가 secret.key 읽기 → 성공해야 정상 ---
+[PASS] agent-dev 읽기 성공
+--- agent-test 가 /var/log/agent-app 목록 보기 → 실패해야 정상 ---
+[PASS] agent-test 로그 디렉토리 접근 거부
+
+== ACL DONE ==
+
+########## 02-ssh-hardening ##########
+== [1/4] 하드닝 설정 드롭인 작성: /etc/ssh/sshd_config.d/99-agent-hardening.conf ==
+# B1-1 기본 보안: SSH 포트 변경 + Root 원격 로그인 차단
+Port 20022
+PermitRootLogin no
+PasswordAuthentication no
+PubkeyAuthentication yes
+12:Include /etc/ssh/sshd_config.d/*.conf
+
+== [2/4] 호스트 키 보장 + 설정 문법 검증 ==
+sshd -t: OK (설정 문법 정상)
+
+== [3/4] sshd 재기동 (기존 인스턴스 종료 → 새 설정으로 기동) ==
+기존 sshd PID: 4765
+drwxr-xr-x 2 root root 40 Oct  7 21:16 /run/sshd
+신규 sshd PID: 5381 
+sshd 리슨 확인: :20022
+
+== [4/4] 검증 ==
+--- 실효 설정 (sshd -T) ---
+port 20022
+permitrootlogin no
+pubkeyauthentication yes
+passwordauthentication no
+--- 포트 리슨 (ss -tulnp) ---
+tcp   LISTEN 0      128                 0.0.0.0:20022      0.0.0.0:*    users:(("sshd",pid=5381,fd=3))           
+tcp   LISTEN 0      128                    [::]:20022         [::]:*    users:(("sshd",pid=5381,fd=4))           
+--- 참고: :22 잔여 리스너 ---
+  ss 출력의 '*:22' 는 프로세스가 systemd(PID 1) 로 찍힌다 = ssh.socket 소켓액티베이션 리스너이며
+  우리가 기동한 sshd 가 아니다. 이 환경은 D-Bus 버스가 없어 'systemctl disable --now ssh.socket'
+  을 실행할 수 없고(systemctl → Failed to connect to bus), PID1 의 fd 를 닫을 방법도 없다.
+  우리가 기동한 sshd 는 20022 에서만 리슨한다. 실서비스 VM 에서는 ssh.socket 을 꺼서 :22 를 없앤다.
+
+== [추가] 실제 접속 테스트 (일반 계정 성공 / root 차단) ==
+total 12
+-rw------- 1 agent-admin agent-admin 100 Oct  7 21:19 authorized_keys
+-rw------- 1 agent-admin agent-admin 411 Oct  7 21:16 id_ed25519
+-rw-r--r-- 1 agent-admin agent-admin 100 Oct  7 21:16 id_ed25519.pub
+--- agent-admin 접속 ---
+uid=1000(agent-admin) gid=1002(agent-admin) groups=1002(agent-admin),1000(agent-common),1001(agent-core)
+b1-lab
+LOGIN_OK
+--- root 접속 시도 (차단돼야 정상 → 실패 종료코드는 의도된 것) ---
+root@127.0.0.1: Permission denied (publickey).
+
+== SSH HARDENING DONE ==
+
+########## 03-firewall ##########
+== [0/7] 환경 실측 ==
+ufw: /usr/sbin/ufw
+firewall-cmd: MISSING
+iptables: iptables v1.8.10 (nf_tables)
+nft inet family: 
+== [1/7] 이 커널에 맞춘 ufw 설정 (실측 근거) ==
+7:IPV6=no
+Logging disabled
+ufw 버전: ufw 0.36.2
+Status: active
+Logging: off
+Default: deny (incoming), allow (outgoing), deny (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+20022/tcp                  ALLOW IN    Anywhere                  
+15034/tcp                  ALLOW IN    Anywhere                  
+49983/tcp                  ALLOW IN    Anywhere                  
+
+
+== [2/7] 기본 정책: 인바운드 deny / 아웃바운드 allow ==
+Default incoming policy changed to 'deny'
+(be sure to update your rules accordingly)
+Default outgoing policy changed to 'allow'
+(be sure to update your rules accordingly)
+
+== [3/7] 허용 규칙 등록 ==
+  # 20022/tcp = SSH, 15034/tcp = APP
+Skipping adding existing rule
+Skipping adding existing rule
+Added user rules (see 'ufw status' for running firewall):
+ufw allow 20022/tcp
+ufw allow 15034/tcp
+ufw allow 49983/tcp
+
+== [4/7] enable 전 안전 점검: 제어 채널 허용 규칙이 정말 들어갔는가 ==
+  확인됨: ufw allow 20022/tcp ufw allow 15034/tcp ufw allow 49983/tcp 
+
+== [5/7] dead-man's switch 설치 후 enable ==
+  watchdog 설치 (45초 후 자동 롤백 예정 · 취소 파일=/tmp/ufw-enable-ok.5432)
+Firewall is active and enabled on system startup
+
+== [6/7] 결과 확인 ==
+Status: active
+Logging: off
+Default: deny (incoming), allow (outgoing), deny (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+20022/tcp                  ALLOW IN    Anywhere                  
+15034/tcp                  ALLOW IN    Anywhere                  
+49983/tcp                  ALLOW IN    Anywhere                  
+
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] 20022/tcp                  ALLOW IN    Anywhere                  
+[ 2] 15034/tcp                  ALLOW IN    Anywhere                  
+[ 3] 49983/tcp                  ALLOW IN    Anywhere                  
+
+--- ufw 가 실제로 걸어둔 iptables 규칙(발췌) ---
+-P INPUT DROP
+-P FORWARD DROP
+-P OUTPUT ACCEPT
+-N ufw-after-forward
+-N ufw-after-input
+-N ufw-after-logging-forward
+-N ufw-after-logging-input
+-N ufw-after-logging-output
+-N ufw-after-output
+-N ufw-before-forward
+-N ufw-before-input
+-N ufw-before-logging-forward
+-N ufw-before-logging-input
+-N ufw-before-logging-output
+-N ufw-before-output
+-N ufw-logging-allow
+-N ufw-logging-deny
+-N ufw-not-local
+-N ufw-reject-forward
+-N ufw-reject-input
+  검증 통과 → watchdog 취소 파일 생성(자동 롤백 해제)
+
+== [7/7] 허용 포트 접속 실측 (로컬) ==
+  tcp/20022 -> CONNECT OK
+  tcp/15034 -> connect 실패 (아직 리슨 전일 수 있음)
+  (참고) 외부에서의 차단 확인은 두 번째 호스트가 필요해 이 샌드박스에서는 재현 불가.
+        클라우드 VM 에서는 'ufw status verbose' + 외부 nmap -p 22,20022,15034 로 확인한다.
+== FIREWALL DONE (ufw) ==
+
+########## 04-app-run ##########
+== [1/3] 바이너리 배치: /usr/local/bin/agent-app ==
+-rwxr-xr-x 1 root root 6498144 Oct  7 21:19 /usr/local/bin/agent-app
+ 177   E   L   F
+
+== [2/3] agent-admin 계정으로 백그라운드 실행 (루트 실행 금지) ==
+started pid=6386
+
+== [3/3] 부트 시퀀스 / 리슨 검증 (최대 30초 대기) ==
+--- 부트 시퀀스 구간 ---
+>>> Starting Agent Boot Sequence...
+[1/5] Checking User Account               [OK]
+   ... Running as service user 'agent-admin' (uid=1000)
+[2/5] Verifying Environment Variables     [OK]
+   ... All required Envs correct
+[3/5] Checking Required Files             [OK]
+   ... Verified 'secret.key' with correct key string.
+[4/5] Checking Port Availability          [OK]
+   ... Port 15034 is available.
+[5/5] Verifying Log Permission            [OK]
+   ... Log directory is writable: /var/log/agent-app
+------------------------------------------------------------
+All Boot Checks Passed!
+Agent READY
+--- [OK] 카운트: 5 ---
+Agent READY: 확인
+--- 프로세스 소유자 (root 아님 확인) ---
+    PID USER     GROUP        ELAPSED CMD
+   6386 agent-a+ agent-a+       00:01 /usr/local/bin/agent-app
+--- 리슨 상태 ---
+tcp   LISTEN 0      1                   0.0.0.0:15034      0.0.0.0:*    users:(("agent-app",pid=6390,fd=4))      
+
+== APP RUN DONE ==
+
+########## 05-monitor-install ##########
+== [1/4] monitor.sh 배치: 원본(참고용) + 이 환경용 수정본 ==
+--- bc 존재 여부 ---
+/usr/bin/bc
+--- 원본(monitor.sh.orig) vs 이 환경용(monitor.sh) 차이 ---
+41,42c41,52
+<   local pid
+<   pid=$(pgrep -f "/usr/local/bin/${APP_NAME}" || pgrep -x "${APP_NAME}" || pgrep -f "${APP_NAME}" | head -n 1 || true)
+---
+>   local pid cand
+>   # [FIX-2] 원본: pgrep -f "/usr/local/bin/${APP_NAME}" || pgrep -x ... || pgrep -f "${APP_NAME}"
+>   #   마지막 fallback 이 "부분문자열" 매칭이라, B1-2 로 앱을 교체한 뒤에는
+>   #   스케줄러 자체(bash /home/agent-admin/agent-app/bin/agent-scheduler.sh)가 먼저 잡혀서
+>   #   monitor.log 에 앱 PID 대신 스케줄러 PID(2420)가 기록됐다 — 실측으로 확인한 결함.
+>   #   → comm 정확 일치(-x)를 후보 목록 순서로 시도하고, 부분문자열 매칭은 최후 수단으로만 쓴다.
+>   pid=""
+>   for cand in ${APP_COMM_CANDIDATES:-agent-app agent-leak-app}; do
+>     pid=$(pgrep -x "$cand" 2>/dev/null | head -n 1 || true)
+>     [[ -n "$pid" ]] && break
+>   done
+>   [[ -z "$pid" ]] && pid=$(pgrep -f "/usr/local/bin/${APP_NAME}" 2>/dev/null | head -n 1 || true)
+115c125
+<   if [ "$(echo "$cpu_usage > 20" | bc)" -eq 1 ]; then
+---
+>   if awk -v v="$cpu_usage" "BEGIN{exit !(v>20)}"; then  # [FIX-1] bc 미설치 환경 대응
+119c129
+<   if [ "$(echo "$mem_usage > 10" | bc)" -eq 1 ]; then
+---
+>   if awk -v v="$mem_usage" "BEGIN{exit !(v>10)}"; then  # [FIX-1] bc 미설치 환경 대응
+122c132
+<   if [ "$(echo "$disk_used > 80" | bc)" -eq 1 ]; then
+---
+>   if awk -v v="$disk_used" "BEGIN{exit !(v>80)}"; then  # [FIX-1] bc 미설치 환경 대응
+
+== [2/4] 소유/권한 검증 (agent-dev:agent-core 750) ==
+total 16
+-rwxr-x--- 1 agent-dev agent-core 4774 Oct  7 21:19 monitor.sh
+-rwxr-x--- 1 agent-dev agent-core 3959 Oct  7 21:19 monitor.sh.orig
+-rwxr-x--- 1 agent-dev agent-core 2039 Oct  7 21:19 report.sh
+/home/agent-admin/agent-app/bin/monitor.sh owner=agent-dev group=agent-core mode=750
+
+== [3/4] cron 실행 계정(agent-admin) 실행 가능 여부 ==
+agent-admin 그룹: agent-admin agent-common agent-core
+bin 디렉토리: agent-dev:agent-core 750
+agent-admin: 실행 권한 OK (agent-core 소속으로 750 스크립트 실행 가능)
+
+== [4/4] 원본 그대로 1회 실행 (bc 부재 증상 기록용) ==
+====== SYSTEM MONITOR RESULT ======
+[HEALTH CHECK] Checking port 15034... [OK]
+ERROR: You need to be root to run this script
+[WARNING] Firewall is not active (UFW)
+[RESOURCE MONITORING]
+CPU Usage : 0.3%
+MEM Usage : 3.7%
+DISK Used  : 1%
+[INFO] Log appended: /var/log/agent-app/monitor.log
+
+== [4/4] 이 환경용 monitor.sh 1회 실행 ==
+====== SYSTEM MONITOR RESULT ======
+[HEALTH CHECK] Checking port 15034... [OK]
+ERROR: You need to be root to run this script
+[WARNING] Firewall is not active (UFW)
+[RESOURCE MONITORING]
+CPU Usage : 4.0%
+MEM Usage : 3.8%
+DISK Used  : 1%
+[INFO] Log appended: /var/log/agent-app/monitor.log
+
+--- monitor.log 최근 5줄 ---
+[2026-10-07 21:19:44] PID:6390 CPU:0.3% MEM:3.7% DISK_USED:1%
+[2026-10-07 21:19:45] PID:6386 CPU:4.0% MEM:3.8% DISK_USED:1%
+
+== MONITOR INSTALL DONE ==
+
+########## 06-scheduler ##########
+== 스케줄러 방식: real-cron ==
+== [1/3] agent-admin 의 crontab 에 등록 (매분) ==
+--- crontab -l -u agent-admin (파일: root:crontab 600) ---
+* * * * * . /home/agent-admin/agent-app/env.sh; /home/agent-admin/agent-app/bin/monitor.sh >> /var/log/agent-app/monitor.cron.log 2>&1
+cron 재시작 완료 (crontab 재스캔)
+
+== [2/3] crond 상태 ==
+Unit crond.service could not be found.
+
+== [3/3] 실행 확인은 07-autorun-check.sh 에서 125초간 실측 ==
+== SCHEDULER DONE (real-cron) ==
+
+########## [8/10] 로그 로테이션(10MB x 10) 실측 ##########
+== [1/4] 대상 로그 파일만 교체한 monitor.sh 사본 생성 (rotate_logs 원본 사용) ==
+7:LOG_FILE="/var/log/agent-app/rotation-test.log"
+9:MAX_LOG_SIZE=$((10 * 1024 * 1024))
+10:MAX_LOG_FILES=10
+
+== [2/4] 정리 후 12 회 회전 발생시키기 ==
+  round 1  : 직전 크기 10.0MB → 회전 후 원본 62, 회전본 누적 1개
+  round 2  : 직전 크기 10.0MB → 회전 후 원본 62, 회전본 누적 2개
+  round 3  : 직전 크기 10.0MB → 회전 후 원본 62, 회전본 누적 3개
+  round 4  : 직전 크기 10.0MB → 회전 후 원본 62, 회전본 누적 4개
+  round 5  : 직전 크기 10.0MB → 회전 후 원본 62, 회전본 누적 5개
+  round 6  : 직전 크기 10.0MB → 회전 후 원본 62, 회전본 누적 6개
+  round 7  : 직전 크기 10.0MB → 회전 후 원본 62, 회전본 누적 7개
+  round 8  : 직전 크기 10.0MB → 회전 후 원본 62, 회전본 누적 8개
+  round 9  : 직전 크기 10.0MB → 회전 후 원본 62, 회전본 누적 9개
+  round 10 : 직전 크기 10.0MB → 회전 후 원본 62, 회전본 누적 10개
+  round 11 : 직전 크기 10.0MB → 회전 후 원본 62, 회전본 누적 10개
+  round 12 : 직전 크기 10.0MB → 회전 후 원본 62, 회전본 누적 10개
+
+== [3/4] 결과 파일 목록 ==
+62 /var/log/agent-app/rotation-test.log
+35K /var/log/agent-app/rotation-test.log.20261007211951.gz
+35K /var/log/agent-app/rotation-test.log.20261007211953.gz
+35K /var/log/agent-app/rotation-test.log.20261007211955.gz
+35K /var/log/agent-app/rotation-test.log.20261007211957.gz
+35K /var/log/agent-app/rotation-test.log.20261007212000.gz
+35K /var/log/agent-app/rotation-test.log.20261007212002.gz
+35K /var/log/agent-app/rotation-test.log.20261007212004.gz
+35K /var/log/agent-app/rotation-test.log.20261007212006.gz
+35K /var/log/agent-app/rotation-test.log.20261007212008.gz
+35K /var/log/agent-app/rotation-test.log.20261007212011.gz
+총 회전본 개수: 10 (정책: 최대 10개 유지)
+총 사용량    : 364K
+
+== [4/4] 판정 ==
+[PASS] 회전본 10개 유지 (초과분 삭제 확인: 12 회 회전했으나 10개)
+[PASS] 회전본 전부 정상 gzip
+       회전본 크기 예시: 35K (원본 10MB)
+[PASS] 회전 후 원본 로그는 새로 시작 (62 bytes < 10MB)
+== ROTATION TEST DONE ==
+
+########## [9/10] 체크리스트 검증 ##########
+############ B1-1 VERIFICATION 2026-10-07 21:20:12 ############
+
+--- 1. SSH ---
+sshd -T 실효값:
+port 20022
+permitrootlogin no
+리슨:
+tcp   LISTEN 0      128                 0.0.0.0:20022      0.0.0.0:*    users:(("sshd",pid=5381,fd=3))           
+tcp   LISTEN 0      128                    [::]:20022         [::]:*    users:(("sshd",pid=5381,fd=4))           
+[PASS] SSH 포트 20022
+[PASS] PermitRootLogin no
+[PASS] 20022 리슨
+
+--- 2. 방화벽 ---
+ufw: ufw 0.36.2
+Status: active
+Logging: off
+Default: deny (incoming), allow (outgoing), deny (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+20022/tcp                  ALLOW IN    Anywhere                  
+15034/tcp                  ALLOW IN    Anywhere                  
+
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] 20022/tcp                  ALLOW IN    Anywhere                  
+[ 2] 15034/tcp                  ALLOW IN    Anywhere                  
+
+[PASS] ufw 활성
+[PASS] ufw 기본 인바운드 deny
+[PASS] ufw 20022/tcp(SSH) 허용
+[PASS] ufw 15034/tcp(APP) 허용
+ufw v4 허용 규칙 수: 2 (20022, 15034, 49983[샌드박스 예외])
+[FAIL] ufw 허용 규칙 = 3개(SSH/APP/샌드박스 예외)
+
+--- 3. 계정/그룹 ---
+uid=1000(agent-admin) gid=1002(agent-admin) groups=1002(agent-admin),1000(agent-common),1001(agent-core)
+uid=1001(agent-dev) gid=1003(agent-dev) groups=1003(agent-dev),1000(agent-common),1001(agent-core)
+uid=1002(agent-test) gid=1004(agent-test) groups=1004(agent-test),1000(agent-common)
+agent-common:x:1000:agent-admin,agent-dev,agent-test
+agent-core:x:1001:agent-admin,agent-dev
+[PASS] agent-admin 존재
+[PASS] agent-dev 존재
+[PASS] agent-test 존재
+[PASS] agent-common = admin,dev,test
+[PASS] agent-core = admin,dev
+
+--- 4. 디렉토리/권한 ---
+drwxr-x---  1 agent-admin agent-common  58 Oct  7 21:15 /home/agent-admin/agent-app
+drwxrwx---+ 1 agent-admin agent-core    44 Oct  7 21:15 /home/agent-admin/agent-app/api_keys
+drwxr-x---  1 agent-dev   agent-core    68 Oct  7 21:20 /home/agent-admin/agent-app/bin
+drwxrwx---+ 1 agent-admin agent-common   0 Oct  7 21:19 /home/agent-admin/agent-app/upload_files
+drwxrwx---+ 1 agent-admin agent-core   856 Oct  7 21:20 /var/log/agent-app
+total 8
+-rw-r----- 1 agent-admin agent-core 19 Oct  7 21:19 secret.key
+-rw-r----- 1 agent-admin agent-core 19 Oct  7 21:19 t_secret.key
+[PASS] upload_files group=agent-common 770
+[PASS] api_keys group=agent-core 770
+[PASS] /var/log/agent-app group=agent-core 770
+[PASS] 키 파일 내용 = agent_api_key_test
+
+--- 5. 앱 부트 시퀀스 / 리슨 ---
+>>> Starting Agent Boot Sequence...
+[1/5] Checking User Account               [OK]
+   ... Running as service user 'agent-admin' (uid=1000)
+[2/5] Verifying Environment Variables     [OK]
+   ... All required Envs correct
+[3/5] Checking Required Files             [OK]
+   ... Verified 'secret.key' with correct key string.
+[4/5] Checking Port Availability          [OK]
+   ... Port 15034 is available.
+[5/5] Verifying Log Permission            [OK]
+   ... Log directory is writable: /var/log/agent-app
+------------------------------------------------------------
+All Boot Checks Passed!
+Agent READY
+[PASS] Boot [OK] 5개
+[PASS] Agent READY
+[PASS] 0.0.0.0:15034 LISTEN
+[PASS] 앱 실행자가 root 아님
+
+--- 6. monitor.sh ---
+/home/agent-admin/agent-app/bin/monitor.sh owner=agent-dev group=agent-core mode=750
+[PASS] monitor.sh agent-dev:agent-core 750
+
+--- 7. monitor.log 누적 ---
+라인 수: 3
+[2026-10-07 21:19:44] PID:6390 CPU:0.3% MEM:3.7% DISK_USED:1%
+[2026-10-07 21:19:45] PID:6386 CPU:4.0% MEM:3.8% DISK_USED:1%
+[2026-10-07 21:20:02] PID:6386 CPU:4.6% MEM:4.2% DISK_USED:1%
+[PASS] monitor.log 포맷
+
+--- 8. 주기 실행 (cron) ---
+크론 데몬: 6505 /usr/sbin/cron -f -P
+agent-admin crontab:
+* * * * * . /home/agent-admin/agent-app/env.sh; /home/agent-admin/agent-app/bin/monitor.sh >> /var/log/agent-app/monitor.cron.log 2>&1
+[PASS] 크론 데몬 가동(cron/crond)
+[PASS] agent-admin crontab 매분 등록
+[PASS] crontab 파일 root 소유/0600
+
+--- 9. POSIX ACL (libacl 직접 호출로 설정) ---
+drwxrwx---+ 1 agent-admin agent-common 0 Oct  7 21:19 /home/agent-admin/agent-app/upload_files
+drwxrwx---+ 1 agent-admin agent-core 44 Oct  7 21:15 /home/agent-admin/agent-app/api_keys
+drwxrwx---+ 1 agent-admin agent-core 856 Oct  7 21:20 /var/log/agent-app
+upload_files 기본(상속) ACL:
+# file: /home/agent-admin/agent-app/upload_files (default)
+user::rwx
+group::rwx
+group:agent-common:rwx
+mask::rwx
+other::---
+
+[PASS] upload_files 에 ACL 존재(ls +)
+[PASS] api_keys 에 ACL 존재(ls +)
+[PASS] /var/log/agent-app 에 ACL 존재
+[PASS] ACL: agent-test 는 api_keys 접근 불가
+[PASS] ACL: agent-test 는 upload_files 쓰기 가능
+[PASS] ACL: agent-dev 는 secret.key 읽기 가능
+
+--- 10. 로그 로테이션(10MB x 10) 실측 ---
+62 /var/log/agent-app/rotation-test.log
+35K /var/log/agent-app/rotation-test.log.20261007211951.gz
+35K /var/log/agent-app/rotation-test.log.20261007211953.gz
+35K /var/log/agent-app/rotation-test.log.20261007211955.gz
+35K /var/log/agent-app/rotation-test.log.20261007211957.gz
+35K /var/log/agent-app/rotation-test.log.20261007212000.gz
+35K /var/log/agent-app/rotation-test.log.20261007212002.gz
+35K /var/log/agent-app/rotation-test.log.20261007212004.gz
+35K /var/log/agent-app/rotation-test.log.20261007212006.gz
+35K /var/log/agent-app/rotation-test.log.20261007212008.gz
+35K /var/log/agent-app/rotation-test.log.20261007212011.gz
+[PASS] 로테이션 실측 로그 존재
+[PASS] 10MB 도달 시 회전 발생(.gz)
+[PASS] 회전본 10개 유지 정책
+[PASS] 회전본 gzip 무결성
+
+############ RESULT: PASS=35 FAIL=1 ############
+B1-1 VERIFICATION: 1 FAIL
+
+########## [10/10] 매분 자동 누적 확인 (125초) ##########
+== 스케줄러 프로세스 (agent-admin 소유여야 함) ==
+(없음)
+
+시작: 2026-10-07 21:20:13 · monitor.log 라인 수 = 3
+125초 대기 (60초 주기 스케줄러가 최소 2회 돈다)...
+종료: 2026-10-07 21:22:18 · monitor.log 라인 수 = 5
+
+증가분 = 2 라인
+
+--- monitor.cron.log (스케줄러가 남긴 실행 기록) 최근 6줄 ---
+[WARNING] Firewall is not active (UFW)
+[RESOURCE MONITORING]
+CPU Usage : 5.2%
+MEM Usage : 4.5%
+DISK Used  : 1%
+[INFO] Log appended: /var/log/agent-app/monitor.log
+
+--- monitor.log 최근 5줄 ---
+[2026-10-07 21:19:44] PID:6390 CPU:0.3% MEM:3.7% DISK_USED:1%
+[2026-10-07 21:19:45] PID:6386 CPU:4.0% MEM:3.8% DISK_USED:1%
+[2026-10-07 21:20:02] PID:6386 CPU:4.6% MEM:4.2% DISK_USED:1%
+[2026-10-07 21:21:02] PID:6386 CPU:4.8% MEM:4.4% DISK_USED:1%
+[2026-10-07 21:22:02] PID:6386 CPU:5.2% MEM:4.5% DISK_USED:1%
+
+[PASS] 주기 실행으로 monitor.log 자동 누적 확인 (+2 라인 / 125초)
+
+########## ALL DONE ##########
+B1-2 로 이어서 가려면: sudo bash ../../../B1-2/lab/scripts/10-deploy-leak-app.sh

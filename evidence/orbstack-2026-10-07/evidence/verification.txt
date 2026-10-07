@@ -1,0 +1,142 @@
+############ B1-1 VERIFICATION 2026-10-07 21:35:45 ############
+
+--- 1. SSH ---
+sshd -T 실효값:
+port 20022
+permitrootlogin no
+리슨:
+tcp   LISTEN 0      128                 0.0.0.0:20022      0.0.0.0:*    users:(("sshd",pid=5381,fd=3))           
+tcp   LISTEN 0      128                    [::]:20022         [::]:*    users:(("sshd",pid=5381,fd=4))           
+[PASS] SSH 포트 20022
+[PASS] PermitRootLogin no
+[PASS] 20022 리슨
+
+--- 2. 방화벽 ---
+ufw: ufw 0.36.2
+Status: active
+Logging: off
+Default: deny (incoming), allow (outgoing), deny (routed)
+New profiles: skip
+
+To                         Action      From
+--                         ------      ----
+20022/tcp                  ALLOW IN    Anywhere                  
+15034/tcp                  ALLOW IN    Anywhere                  
+
+Status: active
+
+     To                         Action      From
+     --                         ------      ----
+[ 1] 20022/tcp                  ALLOW IN    Anywhere                  
+[ 2] 15034/tcp                  ALLOW IN    Anywhere                  
+
+[PASS] ufw 활성
+[PASS] ufw 기본 인바운드 deny
+[PASS] ufw 20022/tcp(SSH) 허용
+[PASS] ufw 15034/tcp(APP) 허용
+ufw v4 허용 규칙 수: 2 (기대: 2)
+[PASS] ufw 허용 규칙 수가 환경별 정책과 일치
+
+--- 3. 계정/그룹 ---
+uid=1000(agent-admin) gid=1002(agent-admin) groups=1002(agent-admin),1000(agent-common),1001(agent-core)
+uid=1001(agent-dev) gid=1003(agent-dev) groups=1003(agent-dev),1000(agent-common),1001(agent-core)
+uid=1002(agent-test) gid=1004(agent-test) groups=1004(agent-test),1000(agent-common)
+agent-common:x:1000:agent-admin,agent-dev,agent-test
+agent-core:x:1001:agent-admin,agent-dev
+[PASS] agent-admin 존재
+[PASS] agent-dev 존재
+[PASS] agent-test 존재
+[PASS] agent-common = admin,dev,test
+[PASS] agent-core = admin,dev
+
+--- 4. 디렉토리/권한 ---
+drwxr-x---  1 agent-admin agent-common  86 Oct  7 21:22 /home/agent-admin/agent-app
+drwxrwx---+ 1 agent-admin agent-core    44 Oct  7 21:15 /home/agent-admin/agent-app/api_keys
+drwxr-x---  1 agent-dev   agent-core   140 Oct  7 21:22 /home/agent-admin/agent-app/bin
+drwxrwx---+ 1 agent-admin agent-common   0 Oct  7 21:35 /home/agent-admin/agent-app/upload_files
+drwxrwx---+ 1 agent-admin agent-core   864 Oct  7 21:22 /var/log/agent-app
+total 8
+-rw-r----- 1 agent-admin agent-core 19 Oct  7 21:19 secret.key
+-rw-r----- 1 agent-admin agent-core 19 Oct  7 21:19 t_secret.key
+[PASS] upload_files group=agent-common 770
+[PASS] api_keys group=agent-core 770
+[PASS] /var/log/agent-app group=agent-core 770
+[PASS] 키 파일 내용 = agent_api_key_test
+
+--- 5. 앱 부트 시퀀스 / 리슨 ---
+>>> Starting Agent Boot Sequence...
+[1/5] Checking User Account               [OK]
+   ... Running as service user 'agent-admin' (uid=1000)
+[2/5] Verifying Environment Variables     [OK]
+   ... All required Envs correct
+[3/5] Checking Required Files             [OK]
+   ... Verified 'secret.key' with correct key string.
+[4/5] Checking Port Availability          [OK]
+   ... Port 15034 is available.
+[5/5] Verifying Log Permission            [OK]
+   ... Log directory is writable: /var/log/agent-app
+------------------------------------------------------------
+All Boot Checks Passed!
+Agent READY
+[PASS] Boot [OK] 5개
+[PASS] Agent READY
+[PASS] 0.0.0.0:15034 LISTEN
+[PASS] 앱 실행자가 root 아님
+
+--- 6. monitor.sh ---
+/home/agent-admin/agent-app/bin/monitor.sh owner=agent-dev group=agent-core mode=750
+[PASS] monitor.sh agent-dev:agent-core 750
+
+--- 7. monitor.log 누적 ---
+라인 수: 17
+[2026-10-07 21:33:02] PID:12127 CPU:0.8% MEM:5.7% DISK_USED:1%
+[2026-10-07 21:34:02] PID:12127 CPU:1.3% MEM:5.1% DISK_USED:1%
+[2026-10-07 21:35:02] PID:13645 CPU:0.0% MEM:5.4% DISK_USED:1%
+[PASS] monitor.log 포맷
+
+--- 8. 주기 실행 (cron) ---
+크론 데몬: 6505 /usr/sbin/cron -f -P
+agent-admin crontab:
+* * * * * . /home/agent-admin/agent-app/env.sh; /home/agent-admin/agent-app/bin/monitor.sh >> /var/log/agent-app/monitor.cron.log 2>&1
+[PASS] 크론 데몬 가동(cron/crond)
+[PASS] agent-admin crontab 매분 등록
+[PASS] crontab 파일 root 소유/0600
+
+--- 9. POSIX ACL (libacl 직접 호출로 설정) ---
+drwxrwx---+ 1 agent-admin agent-common 0 Oct  7 21:35 /home/agent-admin/agent-app/upload_files
+drwxrwx---+ 1 agent-admin agent-core 44 Oct  7 21:15 /home/agent-admin/agent-app/api_keys
+drwxrwx---+ 1 agent-admin agent-core 864 Oct  7 21:22 /var/log/agent-app
+upload_files 기본(상속) ACL:
+# file: /home/agent-admin/agent-app/upload_files (default)
+user::rwx
+group::rwx
+group:agent-common:rwx
+mask::rwx
+other::---
+
+[PASS] upload_files 에 ACL 존재(ls +)
+[PASS] api_keys 에 ACL 존재(ls +)
+[PASS] /var/log/agent-app 에 ACL 존재
+[PASS] ACL: agent-test 는 api_keys 접근 불가
+[PASS] ACL: agent-test 는 upload_files 쓰기 가능
+[PASS] ACL: agent-dev 는 secret.key 읽기 가능
+
+--- 10. 로그 로테이션(10MB x 10) 실측 ---
+62 /var/log/agent-app/rotation-test.log
+35K /var/log/agent-app/rotation-test.log.20261007211951.gz
+35K /var/log/agent-app/rotation-test.log.20261007211953.gz
+35K /var/log/agent-app/rotation-test.log.20261007211955.gz
+35K /var/log/agent-app/rotation-test.log.20261007211957.gz
+35K /var/log/agent-app/rotation-test.log.20261007212000.gz
+35K /var/log/agent-app/rotation-test.log.20261007212002.gz
+35K /var/log/agent-app/rotation-test.log.20261007212004.gz
+35K /var/log/agent-app/rotation-test.log.20261007212006.gz
+35K /var/log/agent-app/rotation-test.log.20261007212008.gz
+35K /var/log/agent-app/rotation-test.log.20261007212011.gz
+[PASS] 로테이션 실측 로그 존재
+[PASS] 10MB 도달 시 회전 발생(.gz)
+[PASS] 회전본 10개 유지 정책
+[PASS] 회전본 gzip 무결성
+
+############ RESULT: PASS=36 FAIL=0 ############
+B1-1 VERIFICATION: ALL PASS

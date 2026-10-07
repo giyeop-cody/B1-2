@@ -1,0 +1,147 @@
+=== Stack Trace Capture for PID 11283 ===
+Timestamp: 2026-10-07 21:31:16
+Capture method: auto-detect (gdb > pstack > /proc)
+tool availability: gdb=/usr/bin/gdb pstack=none
+
+--- 프로세스 트리 ---
+  11287   11283 18612 SNl        01:36 /home/agent-admin/agent-app/agent-leak-app
+  11283       1  2188 Ss         01:36 /home/agent-admin/agent-app/agent-leak-app
+
+================ TARGET(부모/수퍼바이저) (PID 11283) ================
+--- ps -p 11283 ---
+  11283       1  0.0  0.0  2188 Ss         01:36 /home/agent-admin/agent-app/agent-leak-app
+
+--- ps -T -p 11283 (Thread List) ---
+    PID     TID %CPU %MEM STAT WCHAN                    CMD
+  11283   11283  0.0  0.0 Ss   do_wait                  /home/agent-admin/agent-app/agent-leak-app
+
+--- gdb thread backtrace ---
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+0x00007f06581108d7 in __GI___wait4 (pid=11287, stat_loc=0x7ffe3f9f0a7c, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+
+warning: 30	../sysdeps/unix/sysv/linux/wait4.c: No such file or directory
+
+Thread 1 (Thread 0x7f065822d080 (LWP 11283) "agent-leak-app"):
+#0  0x00007f06581108d7 in __GI___wait4 (pid=11287, stat_loc=0x7ffe3f9f0a7c, options=0, usage=0x0) at ../sysdeps/unix/sysv/linux/wait4.c:30
+#1  0x000000000040a1a1 in ?? ()
+#2  0x00000000004057c5 in ?? ()
+#3  0x00007f065802a1ca in __libc_start_call_main (main=main@entry=0x401ca0, argc=argc@entry=1, argv=argv@entry=0x7ffe3f9f1cc8) at ../sysdeps/nptl/libc_start_call_main.h:58
+#4  0x00007f065802a28b in __libc_start_main_impl (main=0x401ca0, argc=1, argv=0x7ffe3f9f1cc8, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7ffe3f9f1cb8) at ../csu/libc-start.c:360
+#5  0x0000000000401cea in ?? ()
+[Inferior 1 (process 11283) detached]
+
+================ CHILD(실제 워커) (PID 11287) ================
+--- ps -p 11287 ---
+  11287   11283  0.0  0.1 18612 SNl        01:37 /home/agent-admin/agent-app/agent-leak-app
+
+--- ps -T -p 11287 (Thread List) ---
+    PID     TID %CPU %MEM STAT WCHAN                    CMD
+  11287   11287  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11363  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+  11287   11364  0.0  0.1 SNl  futex_wait               /home/agent-admin/agent-app/agent-leak-app
+
+--- gdb thread backtrace ---
+[New LWP 11364]
+[New LWP 11363]
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+0x00007f6ac2698e51 in __futex_abstimed_wait_common64 (private=<optimized out>, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0x7f6abc000b70) at ./nptl/futex-internal.c:57
+
+warning: 57	./nptl/futex-internal.c: No such file or directory
+
+Thread 3 (Thread 0x7f6ac0f2f6c0 (LWP 11363) "agent-leak-app"):
+#0  0x00007f6ac2698e51 in __futex_abstimed_wait_common64 (private=<optimized out>, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xe6ae990) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=<optimized out>, abstime=0x0, clockid=0, expected=0, futex_word=0xe6ae990) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xe6ae990, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=<optimized out>) at ./nptl/futex-internal.c:139
+#3  0x00007f6ac26a4fff in do_futex_wait (sem=sem@entry=0xe6ae990, abstime=0x0, clockid=0) at ./nptl/sem_waitcommon.c:111
+#4  0x00007f6ac26a5098 in __new_sem_wait_slow64 (sem=0xe6ae990, abstime=0x0, clockid=0) at ./nptl/sem_waitcommon.c:183
+#5  0x00007f6ac2246cec in PyThread_acquire_lock_timed () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#6  0x00007f6ac22ad6f0 in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#7  0x00007f6ac22ad89e in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#8  0x00007f6ac2151033 in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#9  0x00007f6ac2108aec in _PyObject_MakeTpCall () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#10 0x00007f6ac20a1a7e in _PyEval_EvalFrameDefault () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#11 0x00007f6ac21eb4df in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#12 0x00007f6ac209f776 in _PyEval_EvalFrameDefault () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#13 0x00007f6ac21eb4df in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#14 0x00007f6ac20a2efe in _PyEval_EvalFrameDefault () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#15 0x00007f6ac21eb4df in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#16 0x00007f6ac20a2efe in _PyEval_EvalFrameDefault () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#17 0x00007f6ac21eb4df in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#18 0x00007f6ac210b47c in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#19 0x00007f6ac22ae8dd in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#20 0x00007f6ac22406bb in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#21 0x00007f6ac269cb84 in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:447
+#22 0x00007f6ac2729ecc in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 2 (Thread 0x7f6abbfff6c0 (LWP 11364) "agent-leak-app"):
+#0  0x00007f6ac2698e51 in __futex_abstimed_wait_common64 (private=<optimized out>, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0xe69b460) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=<optimized out>, abstime=0x0, clockid=0, expected=0, futex_word=0xe69b460) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0xe69b460, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=<optimized out>) at ./nptl/futex-internal.c:139
+#3  0x00007f6ac26a4fff in do_futex_wait (sem=sem@entry=0xe69b460, abstime=0x0, clockid=0) at ./nptl/sem_waitcommon.c:111
+#4  0x00007f6ac26a5098 in __new_sem_wait_slow64 (sem=0xe69b460, abstime=0x0, clockid=0) at ./nptl/sem_waitcommon.c:183
+#5  0x00007f6ac2246cec in PyThread_acquire_lock_timed () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#6  0x00007f6ac22ad6f0 in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#7  0x00007f6ac22ad89e in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#8  0x00007f6ac2151033 in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#9  0x00007f6ac2108aec in _PyObject_MakeTpCall () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#10 0x00007f6ac20a1a7e in _PyEval_EvalFrameDefault () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#11 0x00007f6ac21eb4df in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#12 0x00007f6ac209f776 in _PyEval_EvalFrameDefault () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#13 0x00007f6ac21eb4df in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#14 0x00007f6ac20a2efe in _PyEval_EvalFrameDefault () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#15 0x00007f6ac21eb4df in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#16 0x00007f6ac20a2efe in _PyEval_EvalFrameDefault () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#17 0x00007f6ac21eb4df in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#18 0x00007f6ac210b47c in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#19 0x00007f6ac22ae8dd in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#20 0x00007f6ac22406bb in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#21 0x00007f6ac269cb84 in start_thread (arg=<optimized out>) at ./nptl/pthread_create.c:447
+#22 0x00007f6ac2729ecc in clone3 () at ../sysdeps/unix/sysv/linux/x86_64/clone3.S:78
+
+Thread 1 (Thread 0x7f6ac284c080 (LWP 11287) "agent-leak-app"):
+#0  0x00007f6ac2698e51 in __futex_abstimed_wait_common64 (private=<optimized out>, cancel=true, abstime=0x0, op=393, expected=0, futex_word=0x7f6abc000b70) at ./nptl/futex-internal.c:57
+#1  __futex_abstimed_wait_common (cancel=true, private=<optimized out>, abstime=0x0, clockid=0, expected=0, futex_word=0x7f6abc000b70) at ./nptl/futex-internal.c:87
+#2  __GI___futex_abstimed_wait_cancelable64 (futex_word=futex_word@entry=0x7f6abc000b70, expected=expected@entry=0, clockid=clockid@entry=0, abstime=abstime@entry=0x0, private=<optimized out>) at ./nptl/futex-internal.c:139
+#3  0x00007f6ac26a4fff in do_futex_wait (sem=sem@entry=0x7f6abc000b70, abstime=0x0, clockid=0) at ./nptl/sem_waitcommon.c:111
+#4  0x00007f6ac26a5098 in __new_sem_wait_slow64 (sem=0x7f6abc000b70, abstime=0x0, clockid=0) at ./nptl/sem_waitcommon.c:183
+#5  0x00007f6ac2246cec in PyThread_acquire_lock_timed () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#6  0x00007f6ac22ad6f0 in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#7  0x00007f6ac22ad89e in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#8  0x00007f6ac2114001 in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#9  0x00007f6ac20a2efe in _PyEval_EvalFrameDefault () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#10 0x00007f6ac21eb4df in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#11 0x00007f6ac20a2efe in _PyEval_EvalFrameDefault () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#12 0x00007f6ac21eb4df in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#13 0x00007f6ac20a2efe in _PyEval_EvalFrameDefault () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#14 0x00007f6ac21eb4df in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#15 0x00007f6ac20a2efe in _PyEval_EvalFrameDefault () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#16 0x00007f6ac21eb4df in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#17 0x00007f6ac20a2efe in _PyEval_EvalFrameDefault () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#18 0x00007f6ac21eb4df in ?? () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#19 0x00007f6ac21e650e in PyEval_EvalCode () from /tmp/_MEIebsS5a/libpython3.10.so.1.0
+#20 0x00000000004048ca in ?? ()
+#21 0x00000000004055cb in ?? ()
+#22 0x00007f6ac262a1ca in __libc_start_call_main (main=main@entry=0x401ca0, argc=argc@entry=1, argv=argv@entry=0x7ffdd68d2408) at ../sysdeps/nptl/libc_start_call_main.h:58
+#23 0x00007f6ac262a28b in __libc_start_main_impl (main=0x401ca0, argc=1, argv=0x7ffdd68d2408, init=<optimized out>, fini=<optimized out>, rtld_fini=<optimized out>, stack_end=0x7ffdd68d23f8) at ../csu/libc-start.c:360
+#24 0x0000000000401cea in ?? ()
+[Inferior 1 (process 11287) detached]
+
+================ 관측값 기반 판정 ================
+total_threads=4 futex_wait_threads=3 wait4_threads=1
+판정: 워커 스레드 3 개가 futex(락) 대기 중 → 교착상태(순환 대기) 정황 성립
+
+=== Capture complete: /var/log/agent-app/b1-2/deadlock/stacktrace_before.txt ===

@@ -1,0 +1,138 @@
+############ B1-2 보너스: 스케줄링 알고리즘 추론 실측 ############
+측정 시각: 2026-10-07 21:34:19 KST · 측정 길이: 12s
+
+=== [1] 커널 & 스케줄러 클래스 근거 ===
+uname -r      : 6.17.8-orbstack-00308-g8f9c941121b1
+nproc         : 6
+CPU 모델      : Intel(R) Core(TM) i5-8600 CPU @ 3.10GHz
+--- /proc/sys/kernel/sched_* (CFS/RT/DL 튜너블 존재 여부) ---
+  sched_autogroup_enabled = 1
+  sched_cfs_bandwidth_slice_us = 5000
+  sched_deadline_period_max_us = 4194304
+  sched_deadline_period_min_us = 100
+  sched_rr_timeslice_ms = 100
+  sched_rt_period_us = 1000000
+  sched_rt_runtime_us = 950000
+--- /sys/kernel/sched_debug 첫 12줄 ---
+  (읽기 불가)
+
+=== [2] cgroup CPU 제어 상태 (대역폭 제한이 걸려 있는가) ===
+cgroup 경로: /sys/fs/cgroup//.lxc
+--- cpu.max ---
+max 100000
+--- cpu.weight ---
+100
+--- cpu.stat ---
+usage_usec 86806342
+user_usec 65764880
+system_usec 21041462
+nice_usec 41564000
+nr_periods 0
+nr_throttled 0
+throttled_usec 0
+nr_bursts 0
+burst_usec 0
+
+=== [3] agent-leak-app 기동 (CPU_MAX_OCCUPY=50) ===
+관측 대상 PID=13650 (VmRSS=18552 KB)
+램프업 대기 30s — CpuWorker 가 5% 에서 서서히 오르는 것을 실측으로 확인했으므로 정상 구간까지 대기
+
+=== [4] 스레드별 스케줄링 정책·우선순위 (chrt) ===
+chrt: /usr/bin/chrt
+TID      COMM                 chrt(policy/prio)        NICE   RT_PRIO  WCHAN
+13650    agent-leak-app       SCHED_OTHER / 0          10     0        __futex_wait
+13665    agent-leak-app       SCHED_OTHER / 0          10     0        do_select
+13666    agent-leak-app       SCHED_OTHER / 0          10     0        do_select
+
+=== [5] /proc/<pid>/sched — 스케줄러 내부 통계 ===
+agent-leak-app (13650, #threads: 3)
+-------------------------------------------------------------------
+se.exec_start                                :       2010294.261128
+se.vruntime                                  :        136616.972113
+se.sum_exec_runtime                          :            52.590914
+se.nr_migrations                             :                    0
+nr_switches                                  :                   28
+nr_voluntary_switches                        :                   28
+nr_involuntary_switches                      :                    0
+se.load.weight                               :               112640
+se.avg.load_sum                              :                  788
+se.avg.runnable_sum                          :               808234
+se.avg.util_sum                              :               808234
+se.avg.load_avg                              :                    1
+se.avg.runnable_avg                          :                   17
+se.avg.util_avg                              :                   17
+se.avg.last_update_time                      :        2010294260736
+se.avg.util_est                              :                   18
+policy                                       :                    0
+prio                                         :                  130
+se.slice                                     :              2100000
+clock-delta                                  :                   13
+
+=== [6] 12s 동안 스레드별 CPU 시간 증분 (utime+stime, USER_HZ=100) ===
+경과 wall: 12.004s
+TID      COMM                  틱증분       CPU%
+13650    agent-leak-app                0       0.00
+13665    agent-leak-app               14       1.17
+13666    agent-leak-app               14       1.17
+---
+프로세스 전체 틱 증분: 28 → OS 실측 CPU 점유율 2.33%
+
+=== [6b] 자발적/비자발적 컨텍스트 스위치 (duty-cycle 판별 근거) ===
+TID      COMM                 voluntary    nonvoluntary   wchan
+13650    agent-leak-app       28           0              __futex_wait
+13665    agent-leak-app       16           1              do_select
+13666    agent-leak-app       42           1              do_select
+→ 자발적 스위치가 압도적으로 많으면 '일정 주기마다 스스로 잠드는 duty-cycle' 방식이다.
+
+=== [6c] 워커 스레드가 실제로 무엇을 하는가 (syscall 샘플링, 0.2초 x 10회) ===
+--- TID 13665 (agent-leak-app) ---
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+--- TID 13666 (agent-leak-app) ---
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+  syscall_nr=270
+→ x86-64 syscall 번호: 270=pselect6(타임아웃 대기), 23=select, 35=nanosleep, 202=futex, 0=read, 1=write
+
+=== [7] 앱이 스스로 보고한 CPU 점유율 (같은 구간 로그) ===
+2026-10-07 21:34:48,492 [INFO] [CpuWorker] Current Load: 42.91%
+2026-10-07 21:34:51,609 [INFO] [CpuWorker] Current Load: 44.45%
+2026-10-07 21:34:53,721 [INFO] [CpuWorker] Peak reached (50.00%). Starting cooldown...
+2026-10-07 21:34:54,727 [INFO] [CpuWorker] Current Load: 50.00%
+2026-10-07 21:34:57,843 [INFO] [CpuWorker] Current Load: 44.18%
+2026-10-07 21:35:00,962 [INFO] [CpuWorker] Current Load: 41.82%
+2026-10-07 21:35:04,083 [INFO] [CpuWorker] Current Load: 40.07%
+2026-10-07 21:35:07,201 [INFO] [CpuWorker] Current Load: 36.86%
+
+=== [8] cgroup cpu.stat 재측정 (throttling 발생 여부) ===
+usage_usec 88190089
+user_usec 66527957
+system_usec 21662132
+nice_usec 42060000
+nr_periods 0
+nr_throttled 0
+throttled_usec 0
+nr_bursts 0
+burst_usec 0
+
+=== [9] 대조군: 순수 CPU 루프 1개 (외부 기준) ===
+대조군(싱글 스레드 busy loop) CPU 점유율: 100.17%
+
+=== [10] 정리 ===
+앱 종료. 원본 저장: /var/log/agent-app/b1-2/bonus/scheduling-probe.txt
+== SCHEDULING PROBE DONE ==

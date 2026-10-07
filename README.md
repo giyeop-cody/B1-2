@@ -2,6 +2,18 @@
 
 > Memory Leak, CPU Spike, Deadlock — 시스템 장애 3종을 관제 데이터와 로그로 분석하고 GitHub Issue 형태의 기술 리포트로 작성
 
+## 2026-10-07 OrbStack 재실증
+
+Ubuntu 24.04.5 amd64 `b1-lab`에서 B1-1 환경을 구축한 뒤 같은 머신에서
+OOM·CPU·Deadlock의 변경 전후 실험과 스케줄링 측정을 수행했다.
+세 장애는 변경 전 재현되고 변경 후 각각 170초 생존했으며,
+B1-1 원복 후 검증은 **PASS=36 FAIL=0**이다.
+
+- [실측 보고서 및 관측 한계](evidence/orbstack-2026-10-07/REPORT.md)
+- [이번 실행 증거 30종의 SHA-256 목록](evidence/orbstack-2026-10-07/manifest.json)
+
+기존 실증 기록은 보존했다. 이번 측정은 별도 폴더에서 확인한다.
+
 
 <!-- codyssey-links:start -->
 ## 🔗 Codyssey 연결

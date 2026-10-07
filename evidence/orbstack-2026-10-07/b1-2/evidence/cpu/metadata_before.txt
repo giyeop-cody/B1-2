@@ -1,0 +1,12 @@
+case=cpu-before
+timestamp=2026-10-07T21:26:07+0900
+host=b1-lab
+binary=/home/agent-admin/agent-app/agent-leak-app
+MEMORY_LIMIT=512
+CPU_MAX_OCCUPY=100
+MULTI_THREAD_ENABLE=false
+run_as=agent-admin
+app_parent_pid=9515
+app_worker_pid=9519
+observed_pid=9519
+result=TERMINATED

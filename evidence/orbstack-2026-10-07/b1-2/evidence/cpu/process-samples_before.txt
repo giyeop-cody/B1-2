@@ -1,0 +1,21 @@
+parent_pid=9515
+worker_pid=9519
+--- 프로세스 트리 ---
+   9515       1  2192 Ss         00:03 /home/agent-admin/agent-app/agent-leak-app
+   9519    9515 18660 SN         00:02 /home/agent-admin/agent-app/agent-leak-app
+=== sample 1 @ 2026-10-07 21:26:24 ===
+    PID    PPID %CPU %MEM   RSS STAT     ELAPSED CMD
+   9519    9515  0.6  0.1 18660 SN         00:17 /home/agent-admin/agent-app/agent-leak-app
+    PID     TID %CPU %MEM STAT WCHAN                    CMD
+   9519    9519  0.6  0.1 SN   do_select                /home/agent-admin/agent-app/agent-leak-app
+-- top 배치 스냅샷 --
+top - 21:26:24 up 25 min,  0 user,  load average: 0.08, 0.10, 0.08
+Tasks:  22 total,   1 running,  21 sleeping,   0 stopped,   0 zombie
+%Cpu(s):  1.6 us,  3.2 sy,  0.0 ni, 95.2 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15587.5 free,    554.9 used,    155.9 buff/cache     
+MiB Swap:  17073.5 total,  17073.5 free,      0.0 used.  15494.6 avail Mem 
+
+    PID USER      PR  NI    VIRT    RES    SHR S  %CPU  %MEM     TIME+ COMMAND
+      1 root      20   0   21840   6980   3316 S   0.0   0.0   0:01.72 systemd
+%Cpu(s):  0.0 us,  0.0 sy,  0.0 ni,100.0 id,  0.0 wa,  0.0 hi,  0.0 si,  0.0 st 
+MiB Mem :  16049.5 total,  15587.1 free,    555.3 used,    155.9 buff/cache     

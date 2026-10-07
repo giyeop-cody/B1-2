@@ -1,0 +1,12 @@
+case=deadlock-before
+timestamp=2026-10-07T21:29:39+0900
+host=b1-lab
+binary=/home/agent-admin/agent-app/agent-leak-app
+MEMORY_LIMIT=512
+CPU_MAX_OCCUPY=50
+MULTI_THREAD_ENABLE=true
+run_as=agent-admin
+app_parent_pid=11283
+app_worker_pid=11287
+observed_pid=11287
+result=HUNG_THEN_KILLED
